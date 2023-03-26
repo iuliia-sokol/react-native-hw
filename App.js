@@ -1,4 +1,10 @@
 import React, { useEffect, useState } from "react";
+
+import * as Font from "expo-font";
+// import * as SplashScreen from "expo-splash-screen";
+
+// import { useFonts } from "expo-font";
+
 import {
   TouchableWithoutFeedback,
   StyleSheet,
@@ -13,6 +19,11 @@ import {
   Text,
 } from "react-native";
 
+const fontsLoaded = {
+  "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+  "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+};
+
 export default function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,6 +31,15 @@ export default function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [focused, setFocused] = useState("");
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    const loadFonts = async () => {
+      await Font.loadAsync(fontsLoaded);
+      setIsReady(true);
+    };
+    loadFonts();
+  }, []);
 
   const emailHandler = (text) => {
     setEmail(text);
@@ -50,101 +70,105 @@ export default function App() {
   }, [email, password]);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <ImageBackground
-          style={styles.bgImage}
-          source={require("./assets/images/bg.jpg")}
-        >
-          <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+    isReady && (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <ImageBackground
+            style={styles.bgImage}
+            source={require("./assets/images/bg.jpg")}
           >
-            <View
-              style={{
-                ...styles.form,
-                paddingBottom: showKeyboard ? 32 : 111,
-              }}
+            <KeyboardAvoidingView
+              behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
-              <Text style={styles.title}>Войти</Text>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  value={email}
-                  onChangeText={emailHandler}
-                  onFocus={() => {
-                    setShowKeyboard(true);
-                    setFocused("email");
-                  }}
-                  onBlur={() => {
-                    setShowKeyboard(false);
-                    setFocused("");
-                  }}
-                  placeholder="Адрес электронной почты"
-                  style={{
-                    ...styles.input,
-                    borderColor: focused === "email" ? "#FF6C00" : "#E8E8E8",
-                  }}
-                />
-              </View>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  value={password}
-                  onChangeText={passwordHandler}
-                  onFocus={() => {
-                    setShowKeyboard(true);
-                    setFocused("password");
-                  }}
-                  onBlur={() => {
-                    setShowKeyboard(false);
-                    setFocused("");
-                  }}
-                  placeholder="Пароль"
-                  secureTextEntry={!showPassword}
-                  style={{
-                    ...styles.input,
-                    borderColor: focused === "password" ? "#FF6C00" : "#E8E8E8",
-                  }}
-                />
+              <View
+                style={{
+                  ...styles.form,
+                  paddingBottom: showKeyboard ? 32 : 111,
+                }}
+              >
+                <Text style={styles.title}>Войти</Text>
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    value={email}
+                    autoFocus={true}
+                    onChangeText={emailHandler}
+                    onFocus={() => {
+                      setShowKeyboard(true);
+                      setFocused("email");
+                    }}
+                    onBlur={() => {
+                      setShowKeyboard(false);
+                      setFocused("");
+                    }}
+                    placeholder="Адрес электронной почты"
+                    style={{
+                      ...styles.input,
+                      borderColor: focused === "email" ? "#FF6C00" : "#E8E8E8",
+                    }}
+                  />
+                </View>
+                <View style={styles.inputWrapper}>
+                  <TextInput
+                    value={password}
+                    onChangeText={passwordHandler}
+                    onFocus={() => {
+                      setShowKeyboard(true);
+                      setFocused("password");
+                    }}
+                    onBlur={() => {
+                      setShowKeyboard(false);
+                      setFocused("");
+                    }}
+                    placeholder="Пароль"
+                    secureTextEntry={!showPassword}
+                    style={{
+                      ...styles.input,
+                      borderColor:
+                        focused === "password" ? "#FF6C00" : "#E8E8E8",
+                    }}
+                  />
+                  <Pressable
+                    style={styles.passwordIndicator}
+                    onPress={handleInputShow}
+                    accessibilityLabel={"Show password"}
+                  >
+                    <Text
+                      style={{
+                        ...styles.passwordIndicatorText,
+                        opacity: !password ? 0.5 : 1,
+                      }}
+                    >
+                      Показать
+                    </Text>
+                  </Pressable>
+                </View>
+
                 <Pressable
-                  style={styles.passwordIndicator}
-                  onPress={handleInputShow}
-                  accessibilityLabel={"Show password"}
+                  disabled={disabled}
+                  style={{ ...styles.button, opacity: disabled ? 0.7 : 1 }}
+                  onPress={onLogin}
+                  accessibilityLabel={"Login"}
                 >
+                  <Text style={styles.buttonText}>Войти</Text>
+                </Pressable>
+
+                <Pressable>
                   <Text
                     style={{
                       ...styles.passwordIndicatorText,
-                      opacity: !password ? 0.5 : 1,
+                      textAlign: "center",
+                      marginTop: 16,
                     }}
                   >
-                    Показать
+                    Нет аккаунта? Зарегистрироваться
                   </Text>
                 </Pressable>
               </View>
-
-              <Pressable
-                disabled={disabled}
-                style={{ ...styles.button, opacity: disabled ? 0.7 : 1 }}
-                onPress={onLogin}
-                accessibilityLabel={"Login"}
-              >
-                <Text style={styles.buttonText}>Войти</Text>
-              </Pressable>
-
-              <Pressable>
-                <Text
-                  style={{
-                    ...styles.passwordIndicatorText,
-                    textAlign: "center",
-                    marginTop: 16,
-                  }}
-                >
-                  Нет аккаунта? Зарегистрироваться
-                </Text>
-              </Pressable>
-            </View>
-          </KeyboardAvoidingView>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+          </ImageBackground>
+        </View>
+      </TouchableWithoutFeedback>
+    )
   );
 }
 
@@ -187,6 +211,7 @@ const styles = StyleSheet.create({
     top: 16,
   },
   passwordIndicatorText: {
+    fontFamily: "Roboto-Regular",
     color: "#1B4371",
     fontSize: 16,
     fontWeight: 400,
@@ -194,9 +219,9 @@ const styles = StyleSheet.create({
   },
 
   title: {
+    fontFamily: "Roboto-Medium",
     fontSize: 30,
     color: "#212121",
-    // fontFamily: 'Roboto',
     fontWeight: 500,
     lineHeight: 35,
     textAlign: "center",
@@ -210,6 +235,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   buttonText: {
+    fontFamily: "Roboto-Regular",
     textAlign: "center",
     color: "#ffffff",
   },
