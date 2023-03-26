@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import {
+  TouchableWithoutFeedback,
   StyleSheet,
   View,
   TextInput,
-  TouchableWithoutFeedback,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -18,6 +18,7 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [showKeyboard, setShowKeyboard] = useState(false);
   const [focused, setFocused] = useState("");
 
   const emailHandler = (text) => {
@@ -55,24 +56,35 @@ export default function App() {
           style={styles.bgImage}
           source={require("./assets/images/bg.jpg")}
         >
-          <View style={styles.inputsWrapper}>
-            <Text style={styles.title}>Войти</Text>
-            <KeyboardAvoidingView
-              behavior={Platform.OS == "ios" ? "padding" : "height"}
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          >
+            <View
+              style={{
+                ...styles.form,
+                paddingBottom: showKeyboard ? 32 : 111,
+              }}
             >
-              <TextInput
-                value={email}
-                onChangeText={emailHandler}
-                placeholder="Адрес электронной почты"
-                style={{
-                  ...styles.input,
-                  borderColor: focused === "email" ? "#FF6C00" : "#E8E8E8",
-                }}
-              />
+              <Text style={styles.title}>Войти</Text>
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  value={email}
+                  onChangeText={emailHandler}
+                  onFocus={() => setShowKeyboard(true)}
+                  onBlur={() => setShowKeyboard(false)}
+                  placeholder="Адрес электронной почты"
+                  style={{
+                    ...styles.input,
+                    borderColor: focused === "email" ? "#FF6C00" : "#E8E8E8",
+                  }}
+                />
+              </View>
               <View style={styles.inputWrapper}>
                 <TextInput
                   value={password}
                   onChangeText={passwordHandler}
+                  onFocus={() => setShowKeyboard(true)}
+                  onBlur={() => setShowKeyboard(false)}
                   placeholder="Пароль"
                   secureTextEntry={!showPassword}
                   style={{
@@ -88,13 +100,14 @@ export default function App() {
                   <Text
                     style={{
                       ...styles.passwordIndicatorText,
-                      opacity: disabled ? 0.7 : 1,
+                      opacity: disabled ? 0.5 : 1,
                     }}
                   >
                     Показать
                   </Text>
                 </Pressable>
               </View>
+
               <Pressable
                 disabled={disabled}
                 style={{ ...styles.button, opacity: !password ? 0.7 : 1 }}
@@ -103,8 +116,20 @@ export default function App() {
               >
                 <Text style={styles.buttonText}>Войти</Text>
               </Pressable>
-            </KeyboardAvoidingView>
-          </View>
+
+              <Pressable>
+                <Text
+                  style={{
+                    ...styles.passwordIndicatorText,
+                    textAlign: "center",
+                    marginTop: 16,
+                  }}
+                >
+                  Нет аккаунта? Зарегистрироваться
+                </Text>
+              </Pressable>
+            </View>
+          </KeyboardAvoidingView>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
@@ -130,17 +155,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
   },
-  inputsWrapper: {
-    height: 489,
+  form: {
+    // height: 489,
     justifyContent: "flex-start",
-    justifyContent: "center",
     backgroundColor: "#ffffff",
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     paddingTop: 32,
-    paddingBottom: 32,
     paddingHorizontal: 16,
   },
   inputWrapper: {
