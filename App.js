@@ -17,6 +17,7 @@ export default function App() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [disabled, setDisabled] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
 
   const emailHandler = (text) => setEmail(text);
   const passwordHandler = (text) => setPassword(text);
@@ -25,6 +26,10 @@ export default function App() {
     e.preventDefault();
     console.log(`email: ${email},  password: ${password}`);
     Alert.alert("Credentials", `${email} + ${password}`);
+  };
+
+  const handleInputShow = () => {
+    setShowPassword(!showPassword);
   };
 
   useEffect(() => {
@@ -54,16 +59,32 @@ export default function App() {
                 placeholder="Адрес электронной почты"
                 style={styles.input}
               />
-              <TextInput
-                value={password}
-                onChangeText={passwordHandler}
-                placeholder="Пароль"
-                secureTextEntry={true}
-                style={styles.input}
-              />
+              <View style={styles.inputWrapper}>
+                <TextInput
+                  value={password}
+                  onChangeText={passwordHandler}
+                  placeholder="Пароль"
+                  secureTextEntry={!showPassword}
+                  style={styles.input}
+                />
+                <Pressable
+                  style={styles.passwordIndicator}
+                  onPress={handleInputShow}
+                  accessibilityLabel={"Show password"}
+                >
+                  <Text
+                    style={{
+                      ...styles.passwordIndicatorText,
+                      opacity: disabled ? 0.7 : 1,
+                    }}
+                  >
+                    Показать
+                  </Text>
+                </Pressable>
+              </View>
               <Pressable
                 disabled={disabled}
-                style={{ ...styles.button, opacity: disabled ? 0.7 : 1 }}
+                style={{ ...styles.button, opacity: !password ? 0.7 : 1 }}
                 onPress={onLogin}
                 accessibilityLabel={"Login"}
               >
@@ -109,6 +130,21 @@ const styles = StyleSheet.create({
     paddingBottom: 32,
     paddingHorizontal: 16,
   },
+  inputWrapper: {
+    position: "relative",
+  },
+  passwordIndicator: {
+    position: "absolute",
+    right: 16,
+    top: 16,
+  },
+  passwordIndicatorText: {
+    color: "#1B4371",
+    fontSize: 16,
+    fontWeight: 400,
+    textAlign: "right",
+  },
+
   title: {
     fontSize: 30,
     color: "#212121",
@@ -119,6 +155,7 @@ const styles = StyleSheet.create({
     letterSpacing: 0.01,
     marginBottom: 32,
   },
+
   button: {
     backgroundColor: "#FF6C00",
     borderRadius: 100,
