@@ -23,17 +23,17 @@ export default function App() {
 
   const emailHandler = (text) => {
     setEmail(text);
-    setFocused("email");
   };
   const passwordHandler = (text) => {
     setPassword(text);
-    setFocused("password");
   };
 
   const onLogin = (e) => {
     e.preventDefault();
-    console.log(`email: ${email},  password: ${password}`);
-    Alert.alert("Credentials", `${email} + ${password}`);
+    console.log({ email: email, password: password });
+    Alert.alert("Credentials", `email: ${email} password: ${password}`);
+    setEmail("");
+    setPassword("");
   };
 
   const handleInputShow = () => {
@@ -70,8 +70,14 @@ export default function App() {
                 <TextInput
                   value={email}
                   onChangeText={emailHandler}
-                  onFocus={() => setShowKeyboard(true)}
-                  onBlur={() => setShowKeyboard(false)}
+                  onFocus={() => {
+                    setShowKeyboard(true);
+                    setFocused("email");
+                  }}
+                  onBlur={() => {
+                    setShowKeyboard(false);
+                    setFocused("");
+                  }}
                   placeholder="Адрес электронной почты"
                   style={{
                     ...styles.input,
@@ -83,8 +89,14 @@ export default function App() {
                 <TextInput
                   value={password}
                   onChangeText={passwordHandler}
-                  onFocus={() => setShowKeyboard(true)}
-                  onBlur={() => setShowKeyboard(false)}
+                  onFocus={() => {
+                    setShowKeyboard(true);
+                    setFocused("password");
+                  }}
+                  onBlur={() => {
+                    setShowKeyboard(false);
+                    setFocused("");
+                  }}
                   placeholder="Пароль"
                   secureTextEntry={!showPassword}
                   style={{
@@ -100,7 +112,7 @@ export default function App() {
                   <Text
                     style={{
                       ...styles.passwordIndicatorText,
-                      opacity: disabled ? 0.5 : 1,
+                      opacity: !password ? 0.5 : 1,
                     }}
                   >
                     Показать
@@ -110,7 +122,7 @@ export default function App() {
 
               <Pressable
                 disabled={disabled}
-                style={{ ...styles.button, opacity: !password ? 0.7 : 1 }}
+                style={{ ...styles.button, opacity: disabled ? 0.7 : 1 }}
                 onPress={onLogin}
                 accessibilityLabel={"Login"}
               >
