@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
-  Button,
+  Pressable,
   ImageBackground,
   Text,
 } from "react-native";
@@ -61,12 +61,14 @@ export default function App() {
                 secureTextEntry={true}
                 style={styles.input}
               />
-              <Button
-                title={"Войти"}
+              <Pressable
                 disabled={disabled}
-                style={styles.button}
+                style={{ ...styles.button, opacity: disabled ? 0.7 : 1 }}
                 onPress={onLogin}
-              />
+                accessibilityLabel={"Login"}
+              >
+                <Text style={styles.buttonText}>Войти</Text>
+              </Pressable>
             </KeyboardAvoidingView>
           </View>
         </ImageBackground>
@@ -82,7 +84,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecf0f1",
   },
   input: {
-    // marginHorizontal: 16,
     height: 50,
     padding: 16,
     backgroundColor: "#F6F6F6",
@@ -93,7 +94,6 @@ const styles = StyleSheet.create({
   },
   bgImage: {
     flex: 1,
-    // alignItems: "center",
     justifyContent: "flex-end",
   },
   inputsWrapper: {
@@ -122,7 +122,10 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#FF6C00",
     borderRadius: 100,
-    color: "#ffffff",
     padding: 16,
+  },
+  buttonText: {
+    textAlign: "center",
+    color: "#ffffff",
   },
 });
