@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -10,19 +10,31 @@ import {
   Alert,
   Button,
   ImageBackground,
+  Text,
 } from "react-native";
 
 export default function App() {
-  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [disabled, setDisabled] = useState(true);
 
-  const nameHandler = (text) => setName(text);
+  const emailHandler = (text) => setEmail(text);
   const passwordHandler = (text) => setPassword(text);
 
-  const onLogin = () => {
-    console.log(`name: ${name},  password: ${password}`);
-    Alert.alert("Credentials", `${name} + ${password}`);
+  const onLogin = (e) => {
+    e.preventDefault();
+    console.log(`email: ${email},  password: ${password}`);
+    Alert.alert("Credentials", `${email} + ${password}`);
   };
+
+  useEffect(() => {
+    if (email && password) {
+      setDisabled(false);
+    }
+    if (!email || !password) {
+      setDisabled(true);
+    }
+  }, [email, password]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -32,23 +44,29 @@ export default function App() {
           source={require("./assets/images/bg.jpg")}
         >
           <View style={styles.inputsWrapper}>
+            <Text style={styles.title}>Войти</Text>
             <KeyboardAvoidingView
               behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
               <TextInput
-                value={name}
-                onChangeText={nameHandler}
-                placeholder="Username"
+                value={email}
+                onChangeText={emailHandler}
+                placeholder="Адрес электронной почты"
                 style={styles.input}
               />
               <TextInput
                 value={password}
                 onChangeText={passwordHandler}
-                placeholder="Password"
+                placeholder="Пароль"
                 secureTextEntry={true}
                 style={styles.input}
               />
-              <Button title={"Login"} style={styles.input} onPress={onLogin} />
+              <Button
+                title={"Войти"}
+                disabled={disabled}
+                style={styles.button}
+                onPress={onLogin}
+              />
             </KeyboardAvoidingView>
           </View>
         </ImageBackground>
@@ -64,20 +82,47 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecf0f1",
   },
   input: {
-    width: 200,
-    height: 44,
-    padding: 10,
+    // marginHorizontal: 16,
+    height: 50,
+    padding: 16,
+    backgroundColor: "#F6F6F6",
     borderWidth: 1,
-    borderColor: "black",
-    marginBottom: 10,
+    borderColor: "#E8E8E8",
+    borderRadius: 8,
+    marginBottom: 16,
   },
   bgImage: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    // alignItems: "center",
+    justifyContent: "flex-end",
   },
   inputsWrapper: {
-    alignItems: "center",
+    height: 489,
+    justifyContent: "flex-start",
     justifyContent: "center",
+    backgroundColor: "#ffffff",
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    paddingTop: 32,
+    paddingBottom: 32,
+    paddingHorizontal: 16,
+  },
+  title: {
+    fontSize: 30,
+    color: "#212121",
+    // fontFamily: 'Roboto',
+    fontWeight: 500,
+    lineHeight: 35,
+    textAlign: "center",
+    letterSpacing: 0.01,
+    marginBottom: 32,
+  },
+  button: {
+    backgroundColor: "#FF6C00",
+    borderRadius: 100,
+    color: "#ffffff",
+    padding: 16,
   },
 });
