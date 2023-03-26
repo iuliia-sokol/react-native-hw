@@ -18,9 +18,16 @@ export default function App() {
   const [password, setPassword] = useState("");
   const [disabled, setDisabled] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+  const [focused, setFocused] = useState("");
 
-  const emailHandler = (text) => setEmail(text);
-  const passwordHandler = (text) => setPassword(text);
+  const emailHandler = (text) => {
+    setEmail(text);
+    setFocused("email");
+  };
+  const passwordHandler = (text) => {
+    setPassword(text);
+    setFocused("password");
+  };
 
   const onLogin = (e) => {
     e.preventDefault();
@@ -57,7 +64,10 @@ export default function App() {
                 value={email}
                 onChangeText={emailHandler}
                 placeholder="Адрес электронной почты"
-                style={styles.input}
+                style={{
+                  ...styles.input,
+                  borderColor: focused === "email" ? "#FF6C00" : "#E8E8E8",
+                }}
               />
               <View style={styles.inputWrapper}>
                 <TextInput
@@ -65,7 +75,10 @@ export default function App() {
                   onChangeText={passwordHandler}
                   placeholder="Пароль"
                   secureTextEntry={!showPassword}
-                  style={styles.input}
+                  style={{
+                    ...styles.input,
+                    borderColor: focused === "password" ? "#FF6C00" : "#E8E8E8",
+                  }}
                 />
                 <Pressable
                   style={styles.passwordIndicator}
