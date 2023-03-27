@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react"; 
+import * as ImagePicker from 'expo-image-picker';
+
 
 import {
     TouchableWithoutFeedback,
@@ -15,14 +17,32 @@ import {
     Image
   } from "react-native";
 
-const Registration = () => {
+const Registration = ({ navigation }) => {
     const [login, setLogin] = useState('')
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [image, setImage] = useState(null);
     const [disabled, setDisabled] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showKeyboard, setShowKeyboard] = useState(false);
     const [focused, setFocused] = useState("");
+
+
+
+      const avatarHandler = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          quality: 1,
+        });
+    
+        // console.log(result.assets);
+        setImage(result.assets.uri)
+    
+        if (!result.canceled) {
+          setImage(result.assets[0].uri);
+        }
+      };
 
     const loginHandler = (text) =>{
         setLogin(text);
@@ -37,10 +57,13 @@ const Registration = () => {
     
       const onRegister = (e) => {
         e.preventDefault();
-        console.log({ login: login, email: email, password: password });
-        Alert.alert("Credentials:", `login: ${login} 
-        email: ${email} 
-        password: ${password}`);
+        const data = new FormData();
+        data.append('login', login);
+        data.append('email', email);
+        data.append('password', password);
+        data.append('file', image);
+        console.log(JSON.stringify(data));
+        Alert.alert("Credentials:", `login: ${login} email: ${email} password: ${password}`)
         setLogin('')
         setEmail("");
         setPassword("");
@@ -77,9 +100,10 @@ const Registration = () => {
                   }}
                 >
                 <View style={styles.addImage}>
+                    {image? <Image  style={styles.avatar} source={{uri: image}}/> : null}
                 <Pressable
                     style={styles.addImageBtn} 
-                    // onPress={onRegister}
+                    onPress={avatarHandler}
                     accessibilityLabel={"Add avatar"}
                   >
                     <Image  style={styles.addImageBtnImage}  source={require("../assets/images/add.png")}/>
@@ -277,6 +301,11 @@ const styles = StyleSheet.create({
     addImageBtnImage:{
         width:25,
         height:25,
+    },
+    avatar:{
+        borderRadius: 16,
+        width:120,
+        height:120,
     }
   });
   

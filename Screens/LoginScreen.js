@@ -32,7 +32,10 @@ const Login=({ navigation })=> {
   
     const onLogin = (e) => {
       e.preventDefault();
-      console.log({ email: email, password: password });
+      const data = new FormData();
+      data.append('email', email);
+      data.append('password', password);
+      console.log(JSON.stringify(data));
       Alert.alert("Credentials", `email: ${email} password: ${password}`);
       setEmail("");
       setPassword("");
