@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./Screens/LoginScreen";
 import Register from "./Screens/RegistrationScreen";
 import Home from "./Screens/Home";
+import useCachedResources from "./hooks/useCachedResourses";
 
-import * as Font from "expo-font";
-// import * as SplashScreen from "expo-splash-screen";
 
-// import { useFonts } from "expo-font";
 
 const fontsLoaded = {
   "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
@@ -18,19 +16,12 @@ const fontsLoaded = {
 const MainStack = createStackNavigator();
 
 export default () => {
-  const [isReady, setIsReady] = useState(false);
 
-  useEffect(() => {
-    const loadFonts = async () => {
-      await Font.loadAsync(fontsLoaded);
-      setIsReady(true);
-    };
-    loadFonts();
-  }, []);
-
-
+  const isLoadingComplete = useCachedResources(fontsLoaded);
+  if (!isLoadingComplete) {
+    return null;
+  } else {
   return (
-    isReady && (
       <NavigationContainer>
          <MainStack.Navigator initialRouteName="Login">
          <MainStack.Screen name="Registration" component={Register} />
@@ -38,7 +29,8 @@ export default () => {
         <MainStack.Screen name="Home" component={Home} />
          </MainStack.Navigator>
       </NavigationContainer>
-    )
+  
   );
+  }
 }
 

@@ -64,7 +64,8 @@ const Login=({ navigation })=> {
                 <View
                   style={{
                     ...styles.form,
-                    paddingBottom: showKeyboard ? 32 : 111,
+                    // paddingBottom: showKeyboard ? 111 : 111,
+                    paddingBottom: 111,
                   }}
                 >
                   <Text style={styles.title}>Log in</Text>
