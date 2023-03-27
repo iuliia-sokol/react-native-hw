@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./Screens/LoginScreen";
 import Register from "./Screens/RegistrationScreen";
-import Home from "./Screens/Home";
+
 import useCachedResources from "./hooks/useCachedResourses";
 
 
@@ -26,7 +26,7 @@ export default () => {
          <MainStack.Navigator initialRouteName="Login">
          <MainStack.Screen name="Registration" component={Register} />
          <MainStack.Screen name="Login" component={Login} />
-        <MainStack.Screen name="Home" component={Home} />
+      
          </MainStack.Navigator>
       </NavigationContainer>
   
