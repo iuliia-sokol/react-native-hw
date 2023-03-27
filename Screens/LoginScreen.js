@@ -44,6 +44,11 @@ const Login=({ navigation })=> {
     const handleInputShow = () => {
       setShowPassword(!showPassword);
     };
+
+    const handleKeyboard =()=>{
+        Keyboard.dismiss()
+        setShowKeyboard(false)
+    }
   
     useEffect(() => {
       if (email && password) {
@@ -53,36 +58,38 @@ const Login=({ navigation })=> {
         setDisabled(true);
       }
     }, [email, password]);
+
+
   
     return (
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <TouchableWithoutFeedback onPress={handleKeyboard}>
           <View style={styles.container}>
             <ImageBackground
               style={styles.bgImage}
               source={require("../assets/images/bg.jpg")}
             >
               <KeyboardAvoidingView
-                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                behavior={Platform.OS == "ios" && "padding" }
+                // behavior={Platform.OS == "ios" ? "padding" : "height"}
               >
                 <View
                   style={{
                     ...styles.form,
-                    // paddingBottom: showKeyboard ? 111 : 111,
-                    paddingBottom: 111,
+                    paddingBottom: showKeyboard && Platform.OS == "android" ? 32 : 111,
+                    
                   }}
                 >
                   <Text style={styles.title}>Log in</Text>
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={email}
-                      autoFocus={true}
+                    //   autoFocus={true}
                       onChangeText={emailHandler}
                       onFocus={() => {
                         setShowKeyboard(true);
                         setFocused("email");
                       }}
                       onBlur={() => {
-                        setShowKeyboard(false);
                         setFocused("");
                       }}
                       placeholder="Email address"
@@ -101,7 +108,6 @@ const Login=({ navigation })=> {
                         setFocused("password");
                       }}
                       onBlur={() => {
-                        setShowKeyboard(false);
                         setFocused("");
                       }}
                       placeholder="Password"

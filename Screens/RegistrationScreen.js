@@ -36,12 +36,12 @@ const Registration = ({ navigation }) => {
           quality: 1,
         });
     
-        // console.log(result.assets);
-        setImage(result.assets.uri)
-    
-        if (!result.canceled) {
-          setImage(result.assets[0].uri);
+        // console.log(result);
+
+        if (result.canceled) {
+           return
         }
+        setImage(result.assets[0].uri);  
       };
 
     const loginHandler = (text) =>{
@@ -72,6 +72,11 @@ const Registration = ({ navigation }) => {
       const handleInputShow = () => {
         setShowPassword(!showPassword);
       };
+
+      const handleKeyboard =()=>{
+        Keyboard.dismiss()
+        setShowKeyboard(false)
+    }
     
       useEffect(() => {
         if (email && password && login) {
@@ -83,20 +88,19 @@ const Registration = ({ navigation }) => {
       }, [email, password, login]);
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={handleKeyboard}>
           <View style={styles.container}>
             <ImageBackground
               style={styles.bgImage}
               source={require("../assets/images/bg.jpg")}
             >
               <KeyboardAvoidingView
-                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                behavior={Platform.OS == "ios" && "padding" }
               >
                 <View
                   style={{
                     ...styles.form,
-                    // paddingBottom: showKeyboard ? 111 : 111,
-                    paddingBottom: 111,
+                    paddingBottom: showKeyboard && Platform.OS == "android" ? 32 : 111,
                   }}
                 >
                 <View style={styles.addImage}>
@@ -115,14 +119,14 @@ const Registration = ({ navigation }) => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={login}
-                      autoFocus={true}
+                    //   autoFocus={true}
                       onChangeText={loginHandler}
                       onFocus={() => {
                         setShowKeyboard(true);
                         setFocused("login");
                       }}
                       onBlur={() => {
-                        setShowKeyboard(false);
+                       
                         setFocused("");
                       }}
                       placeholder="Login"
@@ -141,7 +145,7 @@ const Registration = ({ navigation }) => {
                         setFocused("email");
                       }}
                       onBlur={() => {
-                        setShowKeyboard(false);
+                       
                         setFocused("");
                       }}
                       placeholder="Email address"
@@ -160,7 +164,7 @@ const Registration = ({ navigation }) => {
                         setFocused("password");
                       }}
                       onBlur={() => {
-                        setShowKeyboard(false);
+                       
                         setFocused("");
                       }}
                       placeholder="Password"
