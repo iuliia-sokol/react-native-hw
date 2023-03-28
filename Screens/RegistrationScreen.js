@@ -63,10 +63,12 @@ const Registration = ({ navigation }) => {
         data.append('password', password);
         data.append('file', image);
         console.log(JSON.stringify(data));
-        Alert.alert("Credentials:", `login: ${login} email: ${email} password: ${password}`)
+        // Alert.alert("Credentials:", `login: ${login} email: ${email} password: ${password}`)
         setLogin('')
         setEmail("");
         setPassword("");
+        navigation.navigate("Home", {data})
+        
       };
     
       const handleInputShow = () => {

@@ -36,9 +36,10 @@ const Login=({ navigation })=> {
       data.append('email', email);
       data.append('password', password);
       console.log(JSON.stringify(data));
-      Alert.alert("Credentials", `email: ${email} password: ${password}`);
+      // Alert.alert("Credentials", `email: ${email} password: ${password}`);
       setEmail("");
       setPassword("");
+      navigation.navigate("Home", {data})
     };
   
     const handleInputShow = () => {
