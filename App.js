@@ -26,7 +26,7 @@ export default () => {
          <MainStack.Navigator initialRouteName="Registration">
          <MainStack.Screen name="Registration" component={Register} />
          <MainStack.Screen name="Login" component={Login} />
-         <MainStack.Screen name="Home" component={Home} />
+         <MainStack.Screen name="Home" component={Home} options={{headerShown:false}}/>
          </MainStack.Navigator>
       </NavigationContainer>
   

@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, View } from "react-native";
+import {StyleSheet, Pressable } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import  Icon from "@expo/vector-icons/Feather";
 
@@ -39,7 +39,29 @@ const Home = ({ navigation, route }) => {
             },
           })}
         >
-           <Tabs.Screen name="Posts" component={Posts} />
+           <Tabs.Screen name="Posts" component={Posts} 
+           options={{
+            headerStyle: {
+              borderBottomWidth: 1,
+              borderBottomColor: "#BDBDBD",
+            },
+            headerTitleStyle: {
+              fontFamily: "Roboto-Medium",
+              fontWeight: 500,
+              fontSize: 17,
+              color: '#212121',
+              letterSpacing: '-0.408px'
+            },
+            headerRightContainerStyle:{paddingRight:16},
+
+            headerRight: () => (
+              <Pressable
+                onPress={() => alert("Exit")}
+              >
+                <Icon name='log-out' size={24} color='#BDBDBD'/>
+              </Pressable>
+            ),
+          }} />
           <Tabs.Screen name="CreatePost" component={CreatePost} />
           <Tabs.Screen name="Profile" component={Profile} />
         </Tabs.Navigator>
@@ -53,7 +75,7 @@ const Home = ({ navigation, route }) => {
         alignItems: "center",
         justifyContent: "center",
       },
-      
+    
     });
     
     export default Home;
