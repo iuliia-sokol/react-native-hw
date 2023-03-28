@@ -55,7 +55,7 @@ import { View,Image, Text, StyleSheet } from "react-native";
         borderRadius:16,
         backgroundColor:'#E8E8E8',
     },
-    postsList:{},
+ 
     name:{ 
         fontFamily: "Roboto-Medium",
         fontSize: 13,
@@ -71,7 +71,7 @@ import { View,Image, Text, StyleSheet } from "react-native";
         fontWeight: 400,
         lineHeight: 13,
         textAlign: "center",
-    }
-
+    },
+    postsList:{},
   });
   export default Posts;

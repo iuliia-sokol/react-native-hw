@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react"; 
-import * as ImagePicker from 'expo-image-picker';
-
 
 import {
     TouchableWithoutFeedback,
@@ -16,6 +14,7 @@ import {
     Text,
     Image
   } from "react-native";
+import { imageHandler } from "../utils/imageHandler";
 
 const Registration = ({ navigation }) => {
     const [login, setLogin] = useState('')
@@ -27,22 +26,6 @@ const Registration = ({ navigation }) => {
     const [showKeyboard, setShowKeyboard] = useState(false);
     const [focused, setFocused] = useState("");
 
-
-
-      const avatarHandler = async () => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.Images,
-          allowsEditing: true,
-          quality: 1,
-        });
-    
-        // console.log(result);
-
-        if (result.canceled) {
-           return
-        }
-        setImage(result.assets[0].uri);  
-      };
 
     const loginHandler = (text) =>{
         setLogin(text);
@@ -109,7 +92,7 @@ const Registration = ({ navigation }) => {
                     {image? <Image  style={styles.avatar} source={{uri: image}}/> : null}
                 <Pressable
                     style={styles.addImageBtn} 
-                    onPress={avatarHandler}
+                    onPress={()=>imageHandler(setImage)}
                     accessibilityLabel={"Add avatar"}
                   >
                     <Image  style={styles.addImageBtnImage}  source={require("../assets/images/add.png")}/>

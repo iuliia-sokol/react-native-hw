@@ -17,6 +17,11 @@ const Home = ({ navigation, route }) => {
     const entries = new Map(data._parts);
     const obj = Object.fromEntries(entries);
   
+
+    const handleLogout =()=>{
+     alert("Exit")
+     navigation.navigate('Login')
+    }
     return (
        
         <Tabs.Navigator
@@ -52,7 +57,7 @@ const Home = ({ navigation, route }) => {
             headerLeftContainerStyle:{paddingLeft:16},
             headerRight: () => (
               <Pressable
-                onPress={() => alert("Exit")}
+                onPress={handleLogout}
               >
                 <Icon name='log-out' size={24} color='#BDBDBD'/>
               </Pressable>
@@ -69,7 +74,7 @@ const Home = ({ navigation, route }) => {
                         headerLeft: () => <HeaderBackButton backImage={ ()=> <Icon name='arrow-left' size={24} color='#BDBDBD'/>} onPress={() => navigation.navigate('Posts')}/>,
                       }}
           />
-         <Tabs.Screen name="Profile" component={Profile} initialParams={obj} options={{headerShown:false}}/>
+         <Tabs.Screen name="Profile" component={Profile} initialParams={obj} options={{headerShown: false}}/>
         </Tabs.Navigator>
        
       );

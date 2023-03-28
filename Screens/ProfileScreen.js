@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-import {ImageBackground, View, Image, Text, StyleSheet } from "react-native";
+import {ImageBackground, View, Image, Text, StyleSheet, Pressable } from "react-native";
+import  Icon from "@expo/vector-icons/Feather";
+
 
 const Profile= ({ navigation, route })=> {
   const params = route.params
   const [image, setImage] = useState(params.file)
   const [name,setName]= useState(params.login)
 
+
+  const handleLogout =()=>{
+    alert("Exit")
+    navigation.navigate('Login')
+   }
     return (
       <View style={styles.container}>
       <ImageBackground
@@ -20,7 +27,13 @@ const Profile= ({ navigation, route })=> {
     
           </View>
             <Text style={styles.title}>{name? name: 'Anonimous'}</Text>
-  
+            <Pressable
+            style={styles.logoutBtn}
+                onPress={handleLogout}
+              >
+                <Icon name='log-out' size={24} color='#BDBDBD'/>
+              </Pressable>
+            <View styles={styles.postsList}></View>
         
           </View>
        
@@ -35,7 +48,6 @@ const Profile= ({ navigation, route })=> {
       justifyContent: "center",
       backgroundColor: "#ecf0f1",
     },
-
     bgImage: {
       flex: 1,
       justifyContent: "flex-end",
@@ -50,8 +62,6 @@ const Profile= ({ navigation, route })=> {
       paddingTop: 32,
       paddingHorizontal: 16,
     },
-
-
     title: {
       fontFamily: "Roboto-Medium",
       fontSize: 30,
@@ -62,7 +72,6 @@ const Profile= ({ navigation, route })=> {
       letterSpacing: 0.01,
       marginBottom: 32,
     },
-
     avatarWrapper:{
         position:'relative',
         alignSelf:'center',
@@ -73,14 +82,13 @@ const Profile= ({ navigation, route })=> {
         width:120,
         height:120,
     },
-
-
     avatar:{
         borderRadius: 16,
         width:120,
         height:120,
     },
-
+    logoutBtn:{},
+    postsList:{},
   });
 
   export default Profile;
