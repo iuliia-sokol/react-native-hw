@@ -69,7 +69,7 @@ const Home = ({ navigation, route }) => {
                         headerLeft: () => <HeaderBackButton backImage={ ()=> <Icon name='arrow-left' size={24} color='#BDBDBD'/>} onPress={() => navigation.navigate('Posts')}/>,
                       }}
           />
-         <Tabs.Screen name="Profile" component={Profile} initialParams={obj} />
+         <Tabs.Screen name="Profile" component={Profile} initialParams={obj} options={{headerShown:false}}/>
         </Tabs.Navigator>
        
       );
@@ -82,7 +82,7 @@ const Home = ({ navigation, route }) => {
         fontWeight: 500,
         fontSize: 17,
         color: '#212121',
-        letterSpacing: '-0.408px'
+        letterSpacing: -0.408,
     },
     headerBox:{
         borderBottomWidth: 1,

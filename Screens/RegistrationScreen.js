@@ -10,7 +10,7 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     Platform,
-    Alert,
+    // Alert,
     Pressable,
     ImageBackground,
     Text,

@@ -17,15 +17,17 @@ import { View,Image, Text, StyleSheet } from "react-native";
        {image? <Image  style={styles.avatar} source={{uri: image}}/> : null}
        </View>
        <View>
-        <Text>
-            {name? name : 'Anonymos'}
-
+        <Text style={styles.name}>
+            {name? name : 'Anonymous'}
         </Text>
-        <Text>
-            {email? email : 'Anonymos'}
-
+        <Text style={styles.email}>
+            {email? email : 'Anonymous'}
         </Text>
        </View>
+       </View>
+
+       <View styles={styles.postsList}>
+
        </View>
       </View>
     );
@@ -41,11 +43,11 @@ import { View,Image, Text, StyleSheet } from "react-native";
       paddingTop:32,
     },
     userData:{
-display:'flex',
-flexDirection:'row',
-gap:8,
-justifyContent:'center',
-alignItems:'center',
+        display:'flex',
+        flexDirection:'row',
+        gap:8,
+        justifyContent:'center',
+        alignItems:'center',
     },
     avatar:{
         width:60,
@@ -53,5 +55,23 @@ alignItems:'center',
         borderRadius:16,
         backgroundColor:'#E8E8E8',
     },
+    postsList:{},
+    name:{ 
+        fontFamily: "Roboto-Medium",
+        fontSize: 13,
+        color: "#212121",
+        fontWeight: 700,
+        lineHeight: 15,
+        textAlign: "center",
+    },
+    email:{ 
+        fontFamily: "Roboto-Regular",
+        fontSize: 11,
+        color: "#212121",
+        fontWeight: 400,
+        lineHeight: 13,
+        textAlign: "center",
+    }
+
   });
   export default Posts;

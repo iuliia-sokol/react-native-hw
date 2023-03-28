@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 
 const CreatePost=({ navigation, route })=> {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={styles.container}>
         <Text>Create post</Text>
       </View>
     );
@@ -13,9 +13,12 @@ const CreatePost=({ navigation, route })=> {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      alignItems: "center",
-      justifyContent: "center",
+      alignItems: "flex-start",
+      justifyContent: "flex-start",
+      backgroundColor:"#ffffff",
+      paddingHorizontal:16,
+      paddingTop:32,
     },
   });
-  
+
   export default CreatePost;
