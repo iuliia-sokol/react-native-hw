@@ -1,5 +1,6 @@
 import React from "react";
-import {StyleSheet, Pressable } from "react-native";
+import { HeaderBackButton } from '@react-navigation/elements';
+import {Pressable, StyleSheet,  } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import  Icon from "@expo/vector-icons/Feather";
 
@@ -13,7 +14,7 @@ const Tabs = createBottomTabNavigator();
 
 const Home = ({ navigation, route }) => {
     const {data} = route.params
-    console.log(data);
+    // console.log(data);
     return (
        
         <Tabs.Navigator
@@ -30,7 +31,7 @@ const Home = ({ navigation, route }) => {
               let iconName;
               if (route.name === "Posts") {
                 iconName = "grid";
-              } else if (route.name === "CreatePost") {
+              } else if (route.name === "Create post") {
                 iconName = "plus";
               } else if (route.name === "Profile") {
                 iconName = "user";
@@ -41,19 +42,12 @@ const Home = ({ navigation, route }) => {
         >
            <Tabs.Screen name="Posts" component={Posts} 
            options={{
-            headerStyle: {
-              borderBottomWidth: 1,
-              borderBottomColor: "#BDBDBD",
-            },
-            headerTitleStyle: {
-              fontFamily: "Roboto-Medium",
-              fontWeight: 500,
-              fontSize: 17,
-              color: '#212121',
-              letterSpacing: '-0.408px'
-            },
+            headerTitleAlign:'center',
+            headerStyle: styles.headerBox,
+            headerPressColor:'#FF6C00',
+            headerTitleStyle: styles.headerTitle,
             headerRightContainerStyle:{paddingRight:16},
-
+            headerLeftContainerStyle:{paddingLeft:16},
             headerRight: () => (
               <Pressable
                 onPress={() => alert("Exit")}
@@ -62,20 +56,36 @@ const Home = ({ navigation, route }) => {
               </Pressable>
             ),
           }} />
-          <Tabs.Screen name="CreatePost" component={CreatePost} />
+          <Tabs.Screen name="Create post" component={CreatePost} 
+                       options={{
+                        headerTitleAlign:'center',
+                        headerStyle: styles.headerBox,
+                        headerPressColor:'#FF6C00',
+                        headerTitleStyle: styles.headerTitle,                        
+                        headerRightContainerStyle:{paddingRight:16},
+                        headerLeftContainerStyle:{paddingLeft:16},
+                        
+                        headerLeft: () => <HeaderBackButton backImage={ ()=> <Icon name='arrow-left' size={24} color='#BDBDBD'/>} onPress={() => navigation.navigate('Posts')}/>,
+                      }}
+          />
           <Tabs.Screen name="Profile" component={Profile} />
         </Tabs.Navigator>
        
       );
     };
     
+
     const styles = StyleSheet.create({
-      container: {
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-      },
-    
-    });
-    
+    headerTitle: {
+        fontFamily: "Roboto-Medium",
+        fontWeight: 500,
+        fontSize: 17,
+        color: '#212121',
+        letterSpacing: '-0.408px'
+    },
+    headerBox:{
+        borderBottomWidth: 1,
+        borderBottomColor: "#BDBDBD",
+    }
+  });
     export default Home;
