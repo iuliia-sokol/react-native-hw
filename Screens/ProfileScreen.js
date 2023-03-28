@@ -53,6 +53,7 @@ const Profile= ({ navigation, route })=> {
       justifyContent: "flex-end",
     },
     contentBox: {
+      position:'relative',
       justifyContent: "flex-start",
       backgroundColor: "#ffffff",
       borderBottomLeftRadius: 0,
@@ -87,7 +88,11 @@ const Profile= ({ navigation, route })=> {
         width:120,
         height:120,
     },
-    logoutBtn:{},
+    logoutBtn:{
+      position:'absolute',
+      top:22,
+      right:18,
+    },
     postsList:{},
   });
 
