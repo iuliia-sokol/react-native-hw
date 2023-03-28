@@ -14,7 +14,9 @@ const Tabs = createBottomTabNavigator();
 
 const Home = ({ navigation, route }) => {
     const {data} = route.params
-    // console.log(data);
+    const entries = new Map(data._parts);
+    const obj = Object.fromEntries(entries);
+  
     return (
        
         <Tabs.Navigator
@@ -40,7 +42,7 @@ const Home = ({ navigation, route }) => {
             },
           })}
         >
-           <Tabs.Screen name="Posts" component={Posts} 
+           <Tabs.Screen name="Posts" component={Posts} initialParams={obj}
            options={{
             headerTitleAlign:'center',
             headerStyle: styles.headerBox,
@@ -56,7 +58,7 @@ const Home = ({ navigation, route }) => {
               </Pressable>
             ),
           }} />
-          <Tabs.Screen name="Create post" component={CreatePost} 
+          <Tabs.Screen name="Create post" component={CreatePost} initialParams={obj}
                        options={{
                         headerTitleAlign:'center',
                         headerStyle: styles.headerBox,
@@ -64,11 +66,10 @@ const Home = ({ navigation, route }) => {
                         headerTitleStyle: styles.headerTitle,                        
                         headerRightContainerStyle:{paddingRight:16},
                         headerLeftContainerStyle:{paddingLeft:16},
-                        
                         headerLeft: () => <HeaderBackButton backImage={ ()=> <Icon name='arrow-left' size={24} color='#BDBDBD'/>} onPress={() => navigation.navigate('Posts')}/>,
                       }}
           />
-          <Tabs.Screen name="Profile" component={Profile} />
+         <Tabs.Screen name="Profile" component={Profile} initialParams={obj} />
         </Tabs.Navigator>
        
       );
