@@ -199,18 +199,18 @@ const Registration = ({ navigation }) => {
                   >
                     <Text style={styles.buttonText}>Register</Text>
                   </Pressable>
-  
-                  <Pressable onPress={() => navigation.navigate("Login")}>
-                    <Text
-                      style={{
-                        ...styles.passwordIndicatorText,
-                        textAlign: "center",
-                        marginTop: 16,
-                      }}
-                    >
-                      Already have an account? Log in
-                    </Text>
-                  </Pressable>
+
+                  <View  style={styles.navBlock}>
+                   <Text
+                      style={styles.passwordIndicatorText
+                      }
+                    >Already have an account?</Text>
+                      <Pressable onPress={() => navigation.navigate("Login")}>
+                        <Text style={styles.passwordIndicatorText
+                      }>Log in</Text>
+                        </Pressable>
+                   </View>
+
                 </View>
               </KeyboardAvoidingView>
             </ImageBackground>
@@ -240,7 +240,6 @@ const styles = StyleSheet.create({
     },
     form: {
       justifyContent: "flex-start",
-      
       backgroundColor: "#ffffff",
       borderBottomLeftRadius: 0,
       borderBottomRightRadius: 0,
@@ -264,7 +263,6 @@ const styles = StyleSheet.create({
       fontWeight: 400,
       textAlign: "right",
     },
-  
     title: {
       fontFamily: "Roboto-Medium",
       fontSize: 30,
@@ -275,7 +273,6 @@ const styles = StyleSheet.create({
       letterSpacing: 0.01,
       marginBottom: 32,
     },
-  
     button: {
       backgroundColor: "#FF6C00",
       borderRadius: 100,
@@ -310,6 +307,13 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         width:120,
         height:120,
+    },
+    navBlock: {
+      marginTop: 16,
+      display:'flex',
+      flexDirection:'row',
+      gap:4,
+      justifyContent:'center'
     }
   });
   

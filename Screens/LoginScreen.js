@@ -142,18 +142,18 @@ const Login=({ navigation })=> {
                   >
                     <Text style={styles.buttonText}>Log in</Text>
                   </Pressable>
-  
-                  <Pressable onPress={() => navigation.navigate("Registration")}>
-                    <Text
-                      style={{
-                        ...styles.passwordIndicatorText,
-                        textAlign: "center",
-                        marginTop: 16,
-                      }}
-                    >
-                      Don't have an account? Register
-                    </Text>
-                  </Pressable>
+ 
+                   <View  style={styles.navBlock}>
+                   <Text
+                      style={styles.passwordIndicatorText
+                      }
+                    >  Don't have an account?</Text>
+                      <Pressable onPress={() => navigation.navigate("Registration")}>
+                        <Text style={styles.passwordIndicatorText
+                      }>Register</Text>
+                        </Pressable>
+                   </View>
+                  
                 </View>
               </KeyboardAvoidingView>
             </ImageBackground>
@@ -228,6 +228,13 @@ const Login=({ navigation })=> {
       textAlign: "center",
       color: "#ffffff",
     },
+    navBlock: {
+      marginTop: 16,
+      display:'flex',
+      flexDirection:'row',
+      gap:4,
+      justifyContent:'center'
+    }
   });
   
 
