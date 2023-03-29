@@ -8,7 +8,7 @@ LogBox.ignoreLogs([
 ]);
 
 
-const Profile= ({ navigation, route })=> {
+const Profile= ({ navigation: { setParams }, route })=> {
   let params = route.params
 
   const [image, setImage] = useState(params.file)
@@ -24,12 +24,10 @@ const Profile= ({ navigation, route })=> {
    const handleLike = (id) =>{
     const liked = posts.find(item => item.id===id)
     liked.likes++
+    setParams(posts)
     // console.log(liked);
    }
 
-   useEffect(()=>{
-   setPosts(params.posts)
-   },[params.posts])
 
    const handleComment = (id) =>{
     navigation.navigate('Comment')

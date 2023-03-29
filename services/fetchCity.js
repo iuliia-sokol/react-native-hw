@@ -35,7 +35,7 @@ export const getCity = async (lat, long) => {
           }
         }
       }
-      console.log(city);
+      // console.log(city);
       return city;
     } catch (error) {
       console.log(error);
