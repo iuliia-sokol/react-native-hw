@@ -46,7 +46,7 @@ import  Icon from "@expo/vector-icons/Feather";
             <View style={styles.postDataWrapper}>
                 <View style={styles.postDataCommentsWrapper}>
                 <Icon name='message-circle' size={24} color='#BDBDBD' />
-                <Text  style={styles.postComments}>{item.comments.length}</Text>
+                <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
                 </View>
                 <View  style={styles.postLocationWrapper}>
                 <Icon name='map-pin' size={24} color='#BDBDBD' />
@@ -155,7 +155,5 @@ import  Icon from "@expo/vector-icons/Feather";
         lineHeight: 19,
         textDecorationLine: 'underline',
     }
-
-
   });
   export default Posts;

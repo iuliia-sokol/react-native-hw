@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"; 
 import * as Location from 'expo-location';
-
+import uuid from 'react-native-uuid';
 import  Icon from "@expo/vector-icons/Feather";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
@@ -23,7 +23,7 @@ import { getCity } from "../services/fetchCity";
 
 const CreatePost=({ navigation, route })=> {
   const params = route.params
-  console.log(params);
+  // console.log(params);
   const [image, setImage] = useState(null);
   const [text, setText] = useState('')
   const [location, setLocation] = useState({lat:'', long:''})
@@ -55,6 +55,14 @@ const handlePublishPost = (e)=>{
         setText("");
         setLocation("");
         setPlace('')
+        params.setPosts(params.posts.unshift({
+          id: uuid.v4(),
+          comments:[],
+          likes:0,
+          file:image,
+          location: place,
+          text:text
+        }))
         navigation.navigate("Posts", {data})
 }
 const handleDeletePost =(e)=>{

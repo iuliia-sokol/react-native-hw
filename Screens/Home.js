@@ -19,6 +19,7 @@ const Home = ({ navigation, route }) => {
     const obj = Object.fromEntries(entries);
     const [posts, setPosts] = useState(postsArray);
   
+    console.log(posts);
 
     const handleLogout =()=>{
      alert("Exit")
@@ -66,7 +67,7 @@ const Home = ({ navigation, route }) => {
               </Pressable>
             ),
           }} />
-          <Tabs.Screen name="Create post" component={CreatePost} initialParams={{...obj, setPosts}}
+          <Tabs.Screen name="Create post" component={CreatePost} initialParams={{...obj, posts, setPosts}}
                        options={{
                         headerTitleAlign:'center',
                         headerStyle: styles.headerBox,
