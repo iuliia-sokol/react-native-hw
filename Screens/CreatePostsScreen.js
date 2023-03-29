@@ -22,6 +22,8 @@ import { getCity } from "../services/fetchCity";
 
 
 const CreatePost=({ navigation, route })=> {
+  const params = route.params
+  console.log(params);
   const [image, setImage] = useState(null);
   const [text, setText] = useState('')
   const [location, setLocation] = useState({lat:'', long:''})

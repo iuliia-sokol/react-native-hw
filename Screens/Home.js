@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { HeaderBackButton } from '@react-navigation/elements';
 import {Pressable, StyleSheet,  } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -7,6 +7,7 @@ import  Icon from "@expo/vector-icons/Feather";
 import CreatePost from "../Screens/CreatePostsScreen";
 import Profile from "../Screens/ProfileScreen";
 import Posts from "../Screens/PostsScreen";
+import { postsArray } from "../utils/posts";
 
 
 const Tabs = createBottomTabNavigator();
@@ -16,6 +17,7 @@ const Home = ({ navigation, route }) => {
     const {data} = route.params
     const entries = new Map(data._parts);
     const obj = Object.fromEntries(entries);
+    const [posts, setPosts] = useState(postsArray);
   
 
     const handleLogout =()=>{
@@ -48,7 +50,7 @@ const Home = ({ navigation, route }) => {
             },
           })}
         >
-           <Tabs.Screen name="Posts" component={Posts} initialParams={obj}
+           <Tabs.Screen name="Posts" component={Posts} initialParams={{...obj, posts}}
            options={{
             headerTitleAlign:'center',
             headerStyle: styles.headerBox,
@@ -64,7 +66,7 @@ const Home = ({ navigation, route }) => {
               </Pressable>
             ),
           }} />
-          <Tabs.Screen name="Create post" component={CreatePost} initialParams={obj}
+          <Tabs.Screen name="Create post" component={CreatePost} initialParams={{...obj, setPosts}}
                        options={{
                         headerTitleAlign:'center',
                         headerStyle: styles.headerBox,
@@ -75,7 +77,7 @@ const Home = ({ navigation, route }) => {
                         headerLeft: () => <HeaderBackButton backImage={ ()=> <Icon name='arrow-left' size={24} color='#BDBDBD'/>} onPress={() => navigation.navigate('Posts')}/>,
                       }}
           />
-         <Tabs.Screen name="Profile" component={Profile} initialParams={obj} options={{headerShown: false}}/>
+         <Tabs.Screen name="Profile" component={Profile} initialParams={{...obj, posts}} options={{headerShown: false}}/>
         </Tabs.Navigator>
        
       );
