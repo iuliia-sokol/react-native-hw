@@ -7,13 +7,10 @@ import {
     SafeAreaView,
     FlatList,
     Pressable,
-    LogBox
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
 
-LogBox.ignoreLogs([
-    'Non-serializable values were found in the navigation state',
-  ]);
+
 
   const Posts=({ navigation, route })=> {
     const params = route.params
@@ -45,8 +42,8 @@ LogBox.ignoreLogs([
         </Text>
        </View>
        </View>
-
-    <SafeAreaView style={styles.postsList}>
+<View style={styles.postsList}>
+    <SafeAreaView >
       <FlatList
         data={posts}
         renderItem={({ item }) => 
@@ -71,7 +68,7 @@ LogBox.ignoreLogs([
         keyExtractor={(item) => item.id}
       />
       </SafeAreaView>
-       
+      </View>
       </View>
     );
   }
@@ -116,6 +113,7 @@ LogBox.ignoreLogs([
         textAlign: "center",
     },
     postsList:{
+     paddingBottom:83
     },
     postsListItem:{
         marginTop:32,

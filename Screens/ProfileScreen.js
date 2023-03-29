@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {ImageBackground, View, Image, LogBox, Text, StyleSheet, Pressable, SafeAreaView,
+import {ImageBackground, View, Image, Text, StyleSheet, Pressable, SafeAreaView,
   FlatList, } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
 
-LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
-]);
 
 
-const Profile= ({ navigation: { setParams }, route })=> {
+const Profile= ({ navigation, route })=> {
   let params = route.params
 
   const [image, setImage] = useState(params.file)
@@ -24,13 +21,15 @@ const Profile= ({ navigation: { setParams }, route })=> {
    const handleLike = (id) =>{
     const liked = posts.find(item => item.id===id)
     liked.likes++
-    setParams(posts)
+    navigation.setParams(posts)
     // console.log(liked);
    }
 
 
    const handleComment = (id) =>{
-    navigation.navigate('Comment')
+    navigation.navigate('Comment',
+    {params,id},
+  );
    }
 
     return (

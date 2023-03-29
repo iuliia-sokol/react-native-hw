@@ -16,13 +16,9 @@ import {
   Platform, 
   Alert,
   TextInput,
-  LogBox} from "react-native";
+  } from "react-native";
 import { imageHandler } from "../utils/imageHandler";
 import { getCity } from "../services/fetchCity";
-
-LogBox.ignoreLogs([
-  'Non-serializable values were found in the navigation state',
-]);
 
 
 const CreatePost=({ navigation, route })=> {
