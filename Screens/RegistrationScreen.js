@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"; 
-
+import  Icon from "@expo/vector-icons/Feather";
 import {
     TouchableWithoutFeedback,
     StyleSheet,
@@ -15,6 +15,8 @@ import {
     Image
   } from "react-native";
 import { imageHandler } from "../utils/imageHandler";
+
+
 
 const Registration = ({ navigation }) => {
     const [login, setLogin] = useState('')
@@ -95,7 +97,16 @@ const Registration = ({ navigation }) => {
                     onPress={()=>imageHandler(setImage)}
                     accessibilityLabel={"Add avatar"}
                   >
-                    <Image  style={styles.addImageBtnImage}  source={require("../assets/images/add.png")}/>
+                  {image?
+                  
+                    <View  style={styles.removeImageBtnImage} >
+                       <Icon name='plus' size={25} color='#BDBDBD' />
+                    </View>
+     
+                    : <View  style={styles.addImageBtnImage} >
+                        <Icon name='plus' size={25} color='#FF6C00' />
+                    </View>
+                    }
                   </Pressable>
                 </View>
                   <Text style={styles.title}>Registration</Text>
@@ -282,12 +293,27 @@ const styles = StyleSheet.create({
         position:'absolute',
         bottom:14,
         right:-12,
-        
+        borderRadius:'50%'    
     },
     addImageBtnImage:{
-        width:25,
-        height:25,
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+        borderRadius:'50%',
+        borderWidth:1,
+        borderColor:'#FF6C00',
+        backgroundColor:'#ffffff',    
     },
+    removeImageBtnImage:{
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      borderRadius:'50%',
+      borderWidth:1,
+      borderColor:'#BDBDBD',
+      backgroundColor:'#ffffff',
+      transform: [{ rotate: '45deg'}],
+  },
     avatar:{
         borderRadius: 16,
         width:120,
