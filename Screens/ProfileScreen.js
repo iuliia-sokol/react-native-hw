@@ -1,20 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {ImageBackground, View, Image, Text, StyleSheet, Pressable, SafeAreaView,
   FlatList, } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
 
 
 const Profile= ({ navigation, route })=> {
-  const params = route.params
+  let params = route.params
+
   const [image, setImage] = useState(params.file)
   const [name,setName]= useState(params.login)
-  const [posts,setPosts]=useState(params.posts)
-   console.log('Chicago, IL, United States'.split(",")[0]);
-
+  const [posts, setPosts]=useState(params.posts)
+   
   const handleLogout =()=>{
     alert("Exit")
     navigation.navigate('Login')
+
    }
+
+   const handleLike = (id) =>{
+    const liked = posts.find(item => item.id===id)
+    liked.likes++
+    console.log(liked);
+   }
+
+   useEffect(()=>{
+   setPosts(params.posts)
+   },[params.posts])
+
+   const handleComment = (id) =>{
+    navigation.navigate('Comment')
+   }
+
     return (
       <View style={styles.container}>
       <ImageBackground
@@ -36,7 +52,7 @@ const Profile= ({ navigation, route })=> {
                 <Icon name='log-out' size={24} color='#BDBDBD'/>
             </Pressable>
 
-            <SafeAreaView style={styles.postsList}>
+       {posts &&  <SafeAreaView style={styles.postsList}>
       <FlatList
         data={posts}
         renderItem={({ item }) => 
@@ -45,14 +61,18 @@ const Profile= ({ navigation, route })=> {
             <Text  style={styles.postText}>{item.text}</Text>
             <View style={styles.postDataWrapper}>
               <View style={styles.postDataAchievesWrapper}>
+              <Pressable onPress={()=>{handleComment(item.id)}}>
                 <View style={styles.postDataCommentsWrapper}>
-               {item.comments.length>0?  <Icon style={{transform:[matrix(-1, 0, 0, 1, 0, 0)]}} name='message-circle' size={24} color='#FF6C00' /> : <Icon name='message-circle' size={24} color='#BDBDBD' />}
+                <Icon  name='message-circle' size={24} color={item.comments.length>0? '#FF6C00': '#BDBDBD'} />  
                 <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
                 </View>
+                </Pressable>
+                <Pressable onPress={()=>{handleLike(item.id)}}>
                 <View style={styles.postDataCommentsWrapper}>
-                {item.likes>0?  <Icon style={{transform:[matrix(-1, 0, 0, 1, 0, 0)]}} name='thumbs-up' size={24} color='#FF6C00' /> : <Icon name='thumbs-up' size={24} color='#BDBDBD' />}
-                <Text  style={styles.postComments}>{item.likes?? item.likes }</Text>
+                 <Icon name='thumbs-up' size={24} color={item.likes>0?'#FF6C00':'#BDBDBD' } /> 
+                <Text  style={styles.postComments}>{item.likes? item.likes:0 }</Text>
                 </View>
+                </Pressable>
                 </View>
                 <View  style={styles.postLocationWrapper}>
                 <Icon name='map-pin' size={24} color='#BDBDBD' />
@@ -63,7 +83,7 @@ const Profile= ({ navigation, route })=> {
         }
         keyExtractor={(item) => item.id}
       />
-      </SafeAreaView>
+      </SafeAreaView>}
              
       </View>
       </ImageBackground>
@@ -157,7 +177,7 @@ const Profile= ({ navigation, route })=> {
     postComments:{
         fontFamily: "Roboto-Regular",
         fontSize: 16,
-        color: "#BDBDBD",
+        color: "#212121",
         fontWeight: 400,
         lineHeight: 19
     },

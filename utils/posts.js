@@ -4,7 +4,21 @@ export const postsArray = [
     file: 'https://images.pexels.com/photos/1209978/pexels-photo-1209978.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
     location:'Chicago, IL, United States',
     text:'PARK',
-    comments:[],
+    comments:[
+        {
+        text: "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
+        date: '2022-10-10'
+        },
+        {
+            text: "A fast 50mm like f1.8 would help with the bokeh. I’ve been using primes as they tend to get a bit sharper images.",
+            date: '2022-10-10'
+            },
+            {
+                text: "Really love your most recent photo. I’ve been trying to capture the same thing for a few months and would love some tips!",
+                date: '2022-10-10'
+                },
+            
+    ],
     likes:0},
 
 {

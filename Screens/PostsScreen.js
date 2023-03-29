@@ -5,7 +5,8 @@ import {
     Text, 
     StyleSheet, 
     SafeAreaView,
-    FlatList, 
+    FlatList,
+    Pressable, 
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
 
@@ -18,7 +19,12 @@ import  Icon from "@expo/vector-icons/Feather";
     const [email,setEmail]=useState(params.email)
     const [posts,setPosts]=useState(params.posts)
 
-    
+    const handleComment = (id) =>{
+        navigation.navigate('Comment',
+           {params,id},
+         );
+       }
+
     return (
       <View style={styles.container}>
        <View style={styles.userData}>
@@ -44,10 +50,13 @@ import  Icon from "@expo/vector-icons/Feather";
             <Image style={styles.postImage} source={{uri: item.file}}/>
             <Text  style={styles.postText}>{item.text}</Text>
             <View style={styles.postDataWrapper}>
-                <View style={styles.postDataCommentsWrapper}>
+                
+                <Pressable onPress={()=> {handleComment(item.id)}}>
+                <View style={styles.postDataCommentsWrapper}> 
                 <Icon name='message-circle' size={24} color='#BDBDBD' />
                 <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
                 </View>
+                </Pressable>
                 <View  style={styles.postLocationWrapper}>
                 <Icon name='map-pin' size={24} color='#BDBDBD' />
                 <Text  style={styles.postLocation}>{item.location}</Text>
