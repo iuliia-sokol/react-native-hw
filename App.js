@@ -12,6 +12,7 @@ import useCachedResources from "./hooks/useCachedResourses";
 const fontsLoaded = {
   "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
   "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+  "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
 };
 
 const MainStack = createStackNavigator();

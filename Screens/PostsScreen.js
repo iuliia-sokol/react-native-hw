@@ -57,7 +57,7 @@ import { View,Image, Text, StyleSheet } from "react-native";
     },
  
     name:{ 
-        fontFamily: "Roboto-Medium",
+        fontFamily: "Roboto-Bold",
         fontSize: 13,
         color: "#212121",
         fontWeight: 700,
