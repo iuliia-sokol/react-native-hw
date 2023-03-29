@@ -27,9 +27,9 @@ const Profile= ({ navigation, route })=> {
 
 
    const handleComment = (id) =>{
-    navigation.navigate('Comment',
-    {params,id},
-  );
+       navigation.navigate('Comment',
+           {params,id},
+         );
    }
 
     return (

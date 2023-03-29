@@ -31,7 +31,7 @@ const CreatePost=({ navigation, route })=> {
   const [errorMsg, setErrorMsg] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [disableClear, setDisableClear]=useState(true);
-  const [posts, setPosts]  =useState(params.posts);
+  const [posts, setPosts] =useState(params.posts);
   const [showKeyboard, setShowKeyboard] = useState(false);
 
   const textHandler = (text) =>{
@@ -40,6 +40,7 @@ const CreatePost=({ navigation, route })=> {
 const locationHandler= (text) =>{
   setPlace(text);
 }
+
   const handleKeyboard =()=>{
     Keyboard.dismiss()
     setShowKeyboard(false)
