@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import {ImageBackground, View, Image, Text, StyleSheet, Pressable } from "react-native";
+import {ImageBackground, View, Image, Text, StyleSheet, Pressable, SafeAreaView,
+  FlatList, } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
 
 
@@ -7,7 +8,8 @@ const Profile= ({ navigation, route })=> {
   const params = route.params
   const [image, setImage] = useState(params.file)
   const [name,setName]= useState(params.login)
-
+  const [posts,setPosts]=useState(params.posts)
+   console.log('Chicago, IL, United States'.split(",")[0]);
 
   const handleLogout =()=>{
     alert("Exit")
@@ -32,11 +34,38 @@ const Profile= ({ navigation, route })=> {
                 onPress={handleLogout}
               >
                 <Icon name='log-out' size={24} color='#BDBDBD'/>
-              </Pressable>
-            <View styles={styles.postsList}></View>
-        
-          </View>
-       
+            </Pressable>
+
+            <SafeAreaView style={styles.postsList}>
+      <FlatList
+        data={posts}
+        renderItem={({ item }) => 
+        <View style={styles.postsListItem}>
+            <Image style={styles.postImage} source={{uri: item.file}}/>
+            <Text  style={styles.postText}>{item.text}</Text>
+            <View style={styles.postDataWrapper}>
+              <View style={styles.postDataAchievesWrapper}>
+                <View style={styles.postDataCommentsWrapper}>
+               {item.comments.length>0?  <Icon style={{transform:[matrix(-1, 0, 0, 1, 0, 0)]}} name='message-circle' size={24} color='#FF6C00' /> : <Icon name='message-circle' size={24} color='#BDBDBD' />}
+                <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
+                </View>
+                <View style={styles.postDataCommentsWrapper}>
+                {item.likes>0?  <Icon style={{transform:[matrix(-1, 0, 0, 1, 0, 0)]}} name='thumbs-up' size={24} color='#FF6C00' /> : <Icon name='thumbs-up' size={24} color='#BDBDBD' />}
+                <Text  style={styles.postComments}>{item.likes?? item.likes }</Text>
+                </View>
+                </View>
+                <View  style={styles.postLocationWrapper}>
+                <Icon name='map-pin' size={24} color='#BDBDBD' />
+                <Text  style={styles.postLocation}>{`${item.location}`.split(",")[0]}</Text>
+                </View>
+            </View>
+        </View>
+        }
+        keyExtractor={(item) => item.id}
+      />
+      </SafeAreaView>
+             
+      </View>
       </ImageBackground>
     </View>
     );
@@ -53,6 +82,7 @@ const Profile= ({ navigation, route })=> {
       justifyContent: "flex-end",
     },
     contentBox: {
+      maxHeight:"70%",
       position:'relative',
       justifyContent: "flex-start",
       backgroundColor: "#ffffff",
@@ -93,7 +123,66 @@ const Profile= ({ navigation, route })=> {
       top:22,
       right:18,
     },
-    postsList:{},
+    postsList:{
+    },
+    postsListItem:{
+        marginTop:32,
+        display:'flex',
+        flexDirection:'column',
+        gap:8
+    },
+    postImage:{
+        width:434,
+        height:240,
+    },
+    postText:{
+        fontFamily: "Roboto-Medium",
+        fontSize: 16,
+        color: "#212121",
+        fontWeight: 500,
+        lineHeight: 19
+    },
+    postDataWrapper:{
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'space-between',
+    },
+    postDataCommentsWrapper:{
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        gap:6
+    },
+    postComments:{
+        fontFamily: "Roboto-Regular",
+        fontSize: 16,
+        color: "#BDBDBD",
+        fontWeight: 400,
+        lineHeight: 19
+    },
+    postLocationWrapper:{
+        display:'flex',
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center',
+        gap:6
+    },  
+    postLocation:{
+        fontFamily: "Roboto-Regular",
+        fontSize: 16,
+        color: "#212121",
+        fontWeight: 400,
+        lineHeight: 19,
+        textDecorationLine: 'underline',
+    },
+    postDataAchievesWrapper:{
+      display:'flex',
+      flexDirection:'row',
+      justifyContent:'space-between',
+      alignItems:'center',
+      gap:24
+    }
   });
 
   export default Profile;

@@ -12,7 +12,7 @@ import  Icon from "@expo/vector-icons/Feather";
 
   const Posts=({ navigation, route })=> {
     const params = route.params
-    console.log(params);
+    // console.log(params);
     const [image, setImage] = useState(params.file)
     const [name,setName]= useState(params.login)
     const [email,setEmail]=useState(params.email)
