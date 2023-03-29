@@ -112,10 +112,10 @@ useEffect(() => {
                   </View>
                   <Pressable 
                    disabled={disabled} 
-                   style={styles.addPostBtn} 
+                   style={disabled? {...styles.addPostBtn, backgroundColor:'#F6F6F6'}: styles.addPostBtn}
                    onPress={handlePublishPost} 
                    accessibilityLabel={"Publish post"}>
-                    <Text style={styles.addPostBtnText}>Publish</Text>
+                    <Text style={disabled? {...styles.addPostBtnText, color:'#BDBDBD'} : styles.addPostBtnText}>Publish</Text>
                   </Pressable>
         </View>
         
