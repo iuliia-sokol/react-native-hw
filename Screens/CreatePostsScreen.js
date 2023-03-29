@@ -1,19 +1,47 @@
 import React, { useEffect, useState } from "react"; 
-import * as ImagePicker from 'expo-image-picker';
+import  Icon from "@expo/vector-icons/Feather";
+import { FontAwesome5 } from '@expo/vector-icons'; 
 
-import { View, Text, Image, StyleSheet, Pressable } from "react-native";
+import {
+  View, 
+  Text, 
+  Image, 
+  StyleSheet, 
+  Pressable, 
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView, 
+  Platform, 
+  TextInput  } from "react-native";
 import { imageHandler } from "../utils/imageHandler";
 
-import { FontAwesome5 } from '@expo/vector-icons'; 
+
 
 const CreatePost=({ navigation, route })=> {
   const [image, setImage] = useState(null);
+  const [text, setText] = useState('')
+  const [location, setLocation] = useState('')
+  const [showKeyboard, setShowKeyboard] = useState(false);
 
-
+  const textHandler = (text) =>{
+    setText(text);
+}
+const locationHandler= (text) =>{
+  setLocation(text);
+}
+  const handleKeyboard =()=>{
+    Keyboard.dismiss()
+    setShowKeyboard(false)
+}
 
     return (
+      <TouchableWithoutFeedback onPress={handleKeyboard}>
       <View style={styles.container}>
+      <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" && "padding" }
+              >
         <View style={styles.addPostForm}>
+
         <View style={styles.addImage}>
         {image? 
         <Image  style={styles.picture} source={{uri: image}}/> : null}
@@ -25,8 +53,43 @@ const CreatePost=({ navigation, route })=> {
                   <FontAwesome5 name="camera" size={20} color={image?"#FFFFFF":"#BDBDBD"} style={styles.addImageBtnIcon} />
                   </Pressable>
         </View>
+       {image? 
+          <Pressable style={{alignSelf:'flex-start'}} onPress={()=>imageHandler(setImage)} accessibilityLabel={"Change picture"}>
+                <Text style={styles.addImageText}>Change photo</Text>
+          </Pressable> :
+          <Pressable  style={{alignSelf:'flex-start'}} onPress={()=>imageHandler(setImage)} accessibilityLabel={"Add picture"}>
+                <Text style={styles.addImageText}>Add photo</Text>
+          </Pressable>    
+                }
+
+          <View style={styles.inputWrapper}>
+                    <TextInput
+                      value={text}
+                      onChangeText={textHandler}
+                      onFocus={() => {
+                        setShowKeyboard(true);
+                      }}
+                      placeholder="Description..."
+                      style={text? styles.input :  {...styles.input, fontFamily:'Roboto-Regular'}}
+                    />
+                  </View>
+                  <View style={styles.inputWrapper}>
+                  <Icon name='map-pin' size={24} color='#BDBDBD' />
+                    <TextInput
+                      value={location}
+                      onChangeText={locationHandler}
+                      onFocus={() => {
+                        setShowKeyboard(true);
+                      }}
+                      placeholder="Location..."
+                      style={{...styles.input, fontFamily:'Roboto-Regular'}}
+                    />
+                  </View>
         </View>
+        
+        </KeyboardAvoidingView>
       </View>
+      </TouchableWithoutFeedback>
     );
   }
 
@@ -71,6 +134,37 @@ const CreatePost=({ navigation, route })=> {
       height: 240,
       backgroundColor:"#E8E8E8",
       borderRadius: 8,
+    },
+    addImageText:{
+      alignSelf:'flex-start',
+      marginTop:8,
+      fontFamily: "Roboto-Regular",
+        fontSize: 16,
+        color: "#BDBDBD",
+        fontWeight: 400,
+        lineHeight: 19,
+        textAlign: "left",
+    },
+    inputWrapper:{
+      marginTop:32,      
+      alignSelf:'flex-start',
+      width:'100%',
+      height:50,
+      display:'flex',
+      flexDirection:'row',
+      justifyContent:'flex-start',
+      alignItems:'center',
+      gap:4,
+      borderBottomColor:'#E8E8E8',
+      borderBottomWidth:1,
+    },
+    input:{
+      fontFamily: "Roboto-Medium",
+      fontSize: 16,
+      color: "#212121",
+      fontWeight: 500,
+      lineHeight: 19,
+      textAlign: "left",
     }
   });
 
