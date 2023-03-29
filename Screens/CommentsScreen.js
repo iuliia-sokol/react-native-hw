@@ -68,7 +68,7 @@ const Comments= ({ navigation, route })=> {
               navigation.setParams(params.posts)
       }
 
-      console.log('posts',posts, 'comments', comments);
+    //   console.log('posts',posts, 'comments', comments);
 
     return ( postSearched &&
         <TouchableWithoutFeedback onPress={handleKeyboard}>
