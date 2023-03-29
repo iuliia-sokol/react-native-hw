@@ -26,13 +26,14 @@ const Home = ({ navigation, route }) => {
        
         <Tabs.Navigator
           screenOptions={({ route }) => ({
+            tabBarStyle: { display: 'none' },
             tabBarItemStyle: {maxWidth: 70, width: 70, height: 40, display:'flex', justifyContent:'center', alignItems:"center", borderRadius:20 },
             tabBarActiveTintColor: "#FFFFFF",
             tabBarInactiveTintColor: "rgba(33, 33, 33, 0.8)",
             tabBarActiveBackgroundColor:"#FF6C00",
             tabBarInactiveBackgroundColor:'transparent',
             tabBarIconStyle:{strokeWidth: 1},
-            tabBarStyle: { display:'flex', height:83, paddingTop:9, paddingBottom:34, paddingHorizontal:81},
+            tabBarStyle: { display:route.name === 'Create post'? 'none':'flex', height:83, paddingTop:9, paddingBottom:34, paddingHorizontal:81},
             tabBarShowLabel: false,
             tabBarIcon: ({ focused, color }) => {
               let iconName;

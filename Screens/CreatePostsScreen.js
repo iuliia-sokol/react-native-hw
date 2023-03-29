@@ -12,7 +12,8 @@ import {
   TouchableWithoutFeedback,
   KeyboardAvoidingView, 
   Platform, 
-  TextInput  } from "react-native";
+  Alert,
+  TextInput} from "react-native";
 import { imageHandler } from "../utils/imageHandler";
 
 
@@ -22,6 +23,7 @@ const CreatePost=({ navigation, route })=> {
   const [text, setText] = useState('')
   const [location, setLocation] = useState('')
   const [disabled, setDisabled] = useState(true);
+  const [disableClear, setDisableClear]=useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
 
   const textHandler = (text) =>{
@@ -47,13 +49,23 @@ const handlePublishPost = (e)=>{
         setLocation("");
         navigation.navigate("Posts", {data})
 }
-
+const handleDeletePost =(e)=>{
+  e.preventDefault();
+  setImage(null)
+  setText("");
+  setLocation("");
+   Alert.alert("Data deleted")
+}
 useEffect(() => {
   if (text && location && image) {
     setDisabled(false);
   }
   if (!text || !location || !image) {
     setDisabled(true);
+    setDisableClear(true);
+  }
+  if (text || location || image) {
+    setDisableClear(false);
   }
 }, [text, location, image]);
 
@@ -117,6 +129,14 @@ useEffect(() => {
                    accessibilityLabel={"Publish post"}>
                     <Text style={disabled? {...styles.addPostBtnText, color:'#BDBDBD'} : styles.addPostBtnText}>Publish</Text>
                   </Pressable>
+
+                  <Pressable 
+                   disabled={disableClear} 
+                   style={disableClear? {...styles.removePostBtn, backgroundColor:'#F6F6F6'}: styles.removePostBtn}
+                   onPress={handleDeletePost} 
+                   accessibilityLabel={"Delete post"}>
+                   <Icon name='trash-2' size={24} color={disableClear? '#BDBDBD': '#ffffff'} />
+                  </Pressable>
         </View>
         
         </KeyboardAvoidingView>
@@ -130,14 +150,14 @@ useEffect(() => {
     container: {
       flex: 1,
       alignItems: "center",
-      justifyContent: "flex-start",
       backgroundColor:"#ffffff",
       paddingHorizontal:16,
-      paddingTop:32,
+   
     },
     addPostForm:{
+      paddingTop:32,
       alignItems:'center',
-      justifyContent:'center'
+      justifyContent:'space-between'
     },
     addImage:{
       position:'relative',
@@ -199,6 +219,9 @@ useEffect(() => {
       textAlign: "left",
     },
     addPostBtn:{
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
       marginTop:32,   
       width:'100%',
       backgroundColor: "#FF6C00",
@@ -211,6 +234,17 @@ useEffect(() => {
       color: "#ffffff",
       fontSize:16,
       lineHeight:19,
+    },
+    removePostBtn:{
+      display:'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      width:70,
+      height:40,
+      padding:8,
+      marginTop:120,
+      backgroundColor: "#FF6C00",
+      borderRadius: 20,
     }
   });
 
