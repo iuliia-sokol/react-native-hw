@@ -6,10 +6,14 @@ import {
     StyleSheet, 
     SafeAreaView,
     FlatList,
-    Pressable, 
+    Pressable,
+    LogBox
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
 
+LogBox.ignoreLogs([
+    'Non-serializable values were found in the navigation state',
+  ]);
 
   const Posts=({ navigation, route })=> {
     const params = route.params

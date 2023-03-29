@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
-import {ImageBackground, View, Image, Text, StyleSheet, Pressable, SafeAreaView,
+import {ImageBackground, View, Image, LogBox, Text, StyleSheet, Pressable, SafeAreaView,
   FlatList, } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 
 const Profile= ({ navigation, route })=> {
@@ -20,7 +24,7 @@ const Profile= ({ navigation, route })=> {
    const handleLike = (id) =>{
     const liked = posts.find(item => item.id===id)
     liked.likes++
-    console.log(liked);
+    // console.log(liked);
    }
 
    useEffect(()=>{

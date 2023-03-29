@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     },
 
     commentAvatar:{
-        borderRadius:'50%',
+        borderRadius: '50%',
         width:28,
         height:28,
         backgroundColor: "#BDBDBD",
