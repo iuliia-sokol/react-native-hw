@@ -20,7 +20,7 @@ const Home = ({ navigation, route }) => {
     const obj = Object.fromEntries(entries);
     const [posts, setPosts] = useState(postsArray);
   
-    console.log(posts);
+    // console.log(posts);
 
     const handleLogout =()=>{
      alert("Exit")
