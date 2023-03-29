@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react"; 
+import * as Location from 'expo-location';
+
 import  Icon from "@expo/vector-icons/Feather";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
@@ -15,13 +17,16 @@ import {
   Alert,
   TextInput} from "react-native";
 import { imageHandler } from "../utils/imageHandler";
+import { getCity } from "../services/fetchCity";
 
 
 
 const CreatePost=({ navigation, route })=> {
   const [image, setImage] = useState(null);
   const [text, setText] = useState('')
-  const [location, setLocation] = useState('')
+  const [location, setLocation] = useState({lat:'', long:''})
+  const [place, setPlace]= useState('')
+  const [errorMsg, setErrorMsg] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [disableClear, setDisableClear]=useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
@@ -30,7 +35,7 @@ const CreatePost=({ navigation, route })=> {
     setText(text);
 }
 const locationHandler= (text) =>{
-  setLocation(text);
+  setPlace(text);
 }
   const handleKeyboard =()=>{
     Keyboard.dismiss()
@@ -47,6 +52,7 @@ const handlePublishPost = (e)=>{
         setImage(null)
         setText("");
         setLocation("");
+        setPlace('')
         navigation.navigate("Posts", {data})
 }
 const handleDeletePost =(e)=>{
@@ -54,21 +60,47 @@ const handleDeletePost =(e)=>{
   setImage(null)
   setText("");
   setLocation("");
+  setPlace('')
    Alert.alert("Data deleted")
 }
 useEffect(() => {
-  if (text && location && image) {
+  if (text && place && image) {
     setDisabled(false);
   }
-  if (!text || !location || !image) {
+  if (!text || !place || !image) {
     setDisabled(true);
     setDisableClear(true);
   }
-  if (text || location || image) {
+  if (text || place || image) {
     setDisableClear(false);
   }
-}, [text, location, image]);
+}, [text, place, image]);
 
+
+const getLocation = ()=>{
+  (async () => {
+    
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== 'granted') {
+      setErrorMsg('Permission to access location was denied');
+      return;
+    }
+
+    let location = await Location.getCurrentPositionAsync({});
+    setLocation({lat: location.coords.latitude, long:location.coords.longitude});
+  })();
+}
+
+useEffect(() => {
+  if (location.lat && location.long) {
+    const fetchData = async () => {    
+      const data = await getCity(location.lat, location.long)
+      setPlace(`${data.cityName}, ${data.country}`);
+    }
+   fetchData()  
+      .catch(console.error);
+  }
+}, [location.lat, location.long]);
 
 
     return (
@@ -111,9 +143,11 @@ useEffect(() => {
                     />
                   </View>
                   <View style={styles.inputWrapper}>
-                  <Icon name='map-pin' size={24} color='#BDBDBD' />
+                  <Pressable onPress={getLocation} >
+                    <Icon name='map-pin' size={24} color='#BDBDBD' />
+                  </Pressable>
                     <TextInput
-                      value={location}
+                      value={place}
                       onChangeText={locationHandler}
                       onFocus={() => {
                         setShowKeyboard(true);
