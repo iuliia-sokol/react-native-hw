@@ -278,6 +278,8 @@ const styles = StyleSheet.create({
       fontFamily: "Roboto-Regular",
       textAlign: "center",
       color: "#ffffff",
+      fontSize:16,
+      lineHeight:19,
     },
     addImage:{
         position:'relative',

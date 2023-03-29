@@ -21,6 +21,7 @@ const CreatePost=({ navigation, route })=> {
   const [image, setImage] = useState(null);
   const [text, setText] = useState('')
   const [location, setLocation] = useState('')
+  const [disabled, setDisabled] = useState(true);
   const [showKeyboard, setShowKeyboard] = useState(false);
 
   const textHandler = (text) =>{
@@ -34,14 +35,38 @@ const locationHandler= (text) =>{
     setShowKeyboard(false)
 }
 
+const handlePublishPost = (e)=>{
+  e.preventDefault();
+        const data = new FormData();
+        data.append('text', text);
+        data.append('location', location);
+        data.append('file', image);
+        console.log(JSON.stringify(data));
+        setImage(null)
+        setText("");
+        setLocation("");
+        navigation.navigate("Posts", {data})
+}
+
+useEffect(() => {
+  if (text && location && image) {
+    setDisabled(false);
+  }
+  if (!text || !location || !image) {
+    setDisabled(true);
+  }
+}, [text, location, image]);
+
+
+
     return (
       <TouchableWithoutFeedback onPress={handleKeyboard}>
       <View style={styles.container}>
       <KeyboardAvoidingView
                 behavior={Platform.OS == "ios" && "padding" }
               >
-        <View style={styles.addPostForm}>
-
+        <View style={{...styles.addPostForm, paddingBottom: showKeyboard && Platform.OS == "android" ? 32 : 270}}>
+    
         <View style={styles.addImage}>
         {image? 
         <Image  style={styles.picture} source={{uri: image}}/> : null}
@@ -85,6 +110,13 @@ const locationHandler= (text) =>{
                       style={{...styles.input, fontFamily:'Roboto-Regular'}}
                     />
                   </View>
+                  <Pressable 
+                   disabled={disabled} 
+                   style={styles.addPostBtn} 
+                   onPress={handlePublishPost} 
+                   accessibilityLabel={"Publish post"}>
+                    <Text style={styles.addPostBtnText}>Publish</Text>
+                  </Pressable>
         </View>
         
         </KeyboardAvoidingView>
@@ -165,6 +197,20 @@ const locationHandler= (text) =>{
       fontWeight: 500,
       lineHeight: 19,
       textAlign: "left",
+    },
+    addPostBtn:{
+      marginTop:32,   
+      width:'100%',
+      backgroundColor: "#FF6C00",
+      borderRadius: 100,
+      padding: 16,
+    },
+    addPostBtnText:{
+      fontFamily: "Roboto-Regular",
+      textAlign: "center",
+      color: "#ffffff",
+      fontSize:16,
+      lineHeight:19,
     }
   });
 

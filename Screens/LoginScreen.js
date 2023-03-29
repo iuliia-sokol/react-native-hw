@@ -228,6 +228,8 @@ const Login=({ navigation })=> {
       fontFamily: "Roboto-Regular",
       textAlign: "center",
       color: "#ffffff",
+      fontSize:16,
+      lineHeight:19,
     },
     navBlock: {
       marginTop: 16,
