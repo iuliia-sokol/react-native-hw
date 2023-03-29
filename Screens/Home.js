@@ -54,7 +54,7 @@ const Home = ({ navigation, route }) => {
             },
           })}
         >
-           <Tabs.Screen name="Posts" component={Posts} initialParams={{...obj, posts, setPosts}}
+           <Tabs.Screen name="Posts" component={Posts} initialParams={{...obj, posts}}
            options={{
             headerTitleAlign:'center',
             headerStyle: styles.headerBox,
@@ -70,7 +70,7 @@ const Home = ({ navigation, route }) => {
               </Pressable>
             ),
           }} />
-          <Tabs.Screen name="Create post" component={CreatePost} initialParams={{...obj, posts, setPosts}}
+          <Tabs.Screen name="Create post" component={CreatePost} initialParams={{...obj, posts}}
                        options={{
                         headerTitleAlign:'center',
                         headerStyle: styles.headerBox,
@@ -81,7 +81,7 @@ const Home = ({ navigation, route }) => {
                         headerLeft: () => <HeaderBackButton backImage={ ()=> <Icon name='arrow-left' size={24} color='#BDBDBD'/>} onPress={() => navigation.navigate('Posts')}/>,
                       }}
           />
-         <Tabs.Screen name="Profile" component={Profile} initialParams={{...obj, posts, setPosts}} options={{headerShown: false}}/>
+         <Tabs.Screen name="Profile" component={Profile} initialParams={{...obj, posts}} options={{headerShown: false}}/>
          <Tabs.Screen name="Comment" component={Comments} options={{
                         headerTitleAlign:'center',
                         headerStyle: styles.headerBox,

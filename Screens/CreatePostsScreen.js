@@ -35,6 +35,7 @@ const CreatePost=({ navigation, route })=> {
   const [errorMsg, setErrorMsg] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [disableClear, setDisableClear]=useState(true);
+  const [posts, setPosts]  =useState(params.posts);
   const [showKeyboard, setShowKeyboard] = useState(false);
 
   const textHandler = (text) =>{
@@ -54,12 +55,12 @@ const handlePublishPost = (e)=>{
         data.append('text', text);
         data.append('location', location);
         data.append('file', image);
-        console.log(JSON.stringify(data));
+  
         setImage(null)
         setText("");
         setLocation("");
         setPlace('')
-        params.setPosts(params.posts.unshift({
+        setPosts(posts.unshift({
           id: uuid.v4(),
           comments:[],
           likes:0,
@@ -69,6 +70,8 @@ const handlePublishPost = (e)=>{
         }))
         navigation.navigate("Posts", {data})
 }
+
+
 const handleDeletePost =(e)=>{
   e.preventDefault();
   setImage(null)
@@ -116,6 +119,11 @@ useEffect(() => {
   }
 }, [location.lat, location.long]);
 
+useEffect(() => {
+  navigation.setOptions({
+    posts: posts,
+  });
+}, [navigation, posts]);
 
     return (
       <TouchableWithoutFeedback onPress={handleKeyboard}>

@@ -114,6 +114,7 @@ const Profile= ({ navigation: { setParams }, route })=> {
       borderTopRightRadius: 25,
       paddingTop: 32,
       paddingHorizontal: 16,
+      paddingBottom:153
     },
     title: {
       fontFamily: "Roboto-Medium",
