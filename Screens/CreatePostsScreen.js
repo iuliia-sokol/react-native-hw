@@ -36,10 +36,10 @@ const CreatePost=({ navigation, route })=> {
   const [showKeyboard, setShowKeyboard] = useState(false);
 
   const textHandler = (text) =>{
-    setText(text);
+    setText(text.trim());
 }
   const locationHandler= (text) =>{
-    setPlace(text);
+    setPlace(text.trim());
 }
 
   const handleKeyboard =()=>{

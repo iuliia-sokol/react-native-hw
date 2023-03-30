@@ -30,14 +30,14 @@ const Registration = ({ navigation }) => {
 
 
     const loginHandler = (text) =>{
-        setLogin(text);
+        setLogin(text.trim());
     }
     const emailHandler = (text) => {
-        setEmail(text);
+        setEmail(text.trim());
       };
 
       const passwordHandler = (text) => {
-        setPassword(text);
+        setPassword(text.trim());
       };
     
       const onRegister = (e) => {

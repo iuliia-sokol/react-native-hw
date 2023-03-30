@@ -43,7 +43,7 @@ const Comments= ({ navigation, route })=> {
     },[text])
 
     const textHandler = (text) =>{
-        setText(text);
+        setText(text.trim());
     }
 
     const handleKeyboard =()=>{

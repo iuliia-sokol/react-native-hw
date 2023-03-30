@@ -24,10 +24,10 @@ const Login=({ navigation })=> {
    
   
     const emailHandler = (text) => {
-      setEmail(text);
+      setEmail(text.trim());
     };
     const passwordHandler = (text) => {
-      setPassword(text);
+      setPassword(text.trim());
     };
   
     const onLogin = (e) => {
