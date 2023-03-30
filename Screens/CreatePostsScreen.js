@@ -26,7 +26,8 @@ const CreatePost=({ navigation, route })=> {
   // console.log(params);
   const [image, setImage] = useState(null);
   const [text, setText] = useState('')
-  const [location, setLocation] = useState({lat:'', long:''})
+  const [location, setLocation] = useState({latitude:'', longitude:''})
+  const [getLocationPressed, setGetLocationPressed] = useState(false)
   const [place, setPlace]= useState('')
   const [errorMsg, setErrorMsg] = useState(null);
   const [disabled, setDisabled] = useState(true);
@@ -37,8 +38,8 @@ const CreatePost=({ navigation, route })=> {
   const textHandler = (text) =>{
     setText(text);
 }
-const locationHandler= (text) =>{
-  setPlace(text);
+  const locationHandler= (text) =>{
+    setPlace(text);
 }
 
   const handleKeyboard =()=>{
@@ -46,81 +47,93 @@ const locationHandler= (text) =>{
     setShowKeyboard(false)
 }
 
-const handlePublishPost = (e)=>{
-  e.preventDefault();
-        const data = new FormData();
-        data.append('text', text);
-        data.append('location', location);
-        data.append('file', image);
-  
-        setImage(null)
-        setText("");
-        setLocation("");
-        setPlace('')
+  const resetForm = () =>{
+    setImage(null)
+    setText("");
+    setLocation({latitude:'', longitude:''});
+    setGetLocationPressed(false)
+    setPlace('')
+  }
+
+  const handlePublishPost = (e)=>{
+    e.preventDefault();
+
+  if(!location.latitude || !location.longitude) {
+    getLocation()
+  }
+  if(location.latitude && location.longitude)  { 
+      const data = new FormData();
+      data.append('text', text);
+      data.append('location', location);
+      data.append('file', image);
+        resetForm()
         setPosts(posts.unshift({
           id: uuid.v4(),
           comments:[],
           likes:0,
           file:image,
           location: place,
+          coordinates: {...location},
           text:text
         }))
-        navigation.navigate("Posts", {data})
+        // console.log(data);
+        navigation.navigate("Posts", {data})}
 }
 
 
-const handleDeletePost =(e)=>{
-  e.preventDefault();
-  setImage(null)
-  setText("");
-  setLocation("");
-  setPlace('')
-   Alert.alert("Data deleted")
-}
-useEffect(() => {
-  if (text && place && image) {
-    setDisabled(false);
+  const handleDeletePost =(e)=>{
+    e.preventDefault();
+    resetForm()
+    Alert.alert("Data deleted")
   }
-  if (!text || !place || !image) {
-    setDisabled(true);
-    setDisableClear(true);
-  }
-  if (text || place || image) {
-    setDisableClear(false);
-  }
-}, [text, place, image]);
 
+  const getLocation = ()=>{
+    (async () => {
 
-const getLocation = ()=>{
-  (async () => {
-    
-    let { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let {coords} = await Location.getCurrentPositionAsync({});
+      setLocation({latitude: coords.latitude, longitude: coords.longitude});
+    })();
+  }
+
+  useEffect(() => {
+    if (text && place && image) {
+      setDisabled(false);
     }
-
-    let location = await Location.getCurrentPositionAsync({});
-    setLocation({lat: location.coords.latitude, long:location.coords.longitude});
-  })();
-}
-
-useEffect(() => {
-  if (location.lat && location.long) {
-    const fetchData = async () => {    
-      const data = await getCity(location.lat, location.long)
-      setPlace(`${data.cityName}, ${data.country}`);
+    if (!text || !place || !image) {
+      setDisabled(true);
+      setDisableClear(true);
     }
-   fetchData()  
-      .catch(console.error);
-  }
-}, [location.lat, location.long]);
+    if (text || place || image) {
+      setDisableClear(false);
+    }
+  }, [text, place, image]);
 
-useEffect(() => {
-  navigation.setOptions({
-    posts: posts,
-  });
-}, [navigation, posts]);
+
+    useEffect(() => {
+      if (getLocationPressed && location.latitude && location.longitude) {
+        const fetchData = async () => {    
+          const data = await getCity(location.latitude, location.longitude)
+          setPlace(`${data.cityName}, ${data.country}`);
+        }
+      fetchData()  
+          .catch(console.error);
+      }
+    }, [location.latitude, location.longitude, getLocationPressed]);
+
+
+    useEffect(() => {
+      navigation.setOptions({
+        posts: posts,
+      });
+    }, [navigation, posts]);
+
+
 
     return (
       <TouchableWithoutFeedback onPress={handleKeyboard}>
@@ -163,12 +176,13 @@ useEffect(() => {
                     />
                   </View>
                   <View style={styles.inputWrapper}>
-                  <Pressable onPress={getLocation} >
+                  <Pressable onPress={()=> {setGetLocationPressed(true)
+                    getLocation()}} >
                     <Icon name='map-pin' size={24} color='#BDBDBD' />
                   </Pressable>
                     <TextInput
                       value={place}
-                      selectionColor='#FF6C00'
+                      selectionColor='#FF6C00'r
                       onChangeText={locationHandler}
                       onFocus={() => {
                         setShowKeyboard(true);

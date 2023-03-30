@@ -5,15 +5,12 @@ import * as Location from "expo-location";
 
 const Map = ({ navigation, route }) => {
   let params = route.params
-  // console.log('map params', params);
   
   const [posts, setPosts]=useState(params.params.posts)
   const [location, setLocation] = useState(null);
   const postSearched = posts.find(item=>item.id===params.id)
 
   // console.log(postSearched);
-
-
 
   useEffect(() => {
     (async () => {
@@ -50,8 +47,6 @@ const Map = ({ navigation, route }) => {
   style={styles.mapStyle}
   region={{
     ...location,
-    // latitudeDelta: 0.0922,
-    // longitudeDelta: 0.0421,
   }}
   showsUserLocation={true}
 >

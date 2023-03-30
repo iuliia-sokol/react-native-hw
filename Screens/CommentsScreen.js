@@ -22,13 +22,11 @@ const Comments= ({ navigation, route })=> {
     const [image, setImage] = useState(params.params.file)
     const [posts, setPosts]=useState(params.params.posts)
     const [disabled, setDisabled] = useState(true);
-    const postSearched = posts.find(item=>item.id===params.id)
-
     const [text, setText] = useState('')
-
     const [comments, setComments] = useState([])
     const [showKeyboard, setShowKeyboard] = useState(false);
 
+    const postSearched = posts.find(item=>item.id===params.id)
 
     useEffect(()=>{
         if(postSearched){

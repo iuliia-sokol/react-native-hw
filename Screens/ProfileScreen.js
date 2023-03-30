@@ -25,6 +25,12 @@ const Profile= ({ navigation, route })=> {
     // console.log(liked);
    }
 
+   const handleLocation = (id)=> {
+    navigation.navigate('Map',
+       {params,id},
+     );
+   }
+
 
    const handleComment = (id) =>{
        navigation.navigate('Comment',
@@ -75,10 +81,12 @@ const Profile= ({ navigation, route })=> {
                 </View>
                 </Pressable>
                 </View>
+                <Pressable onPress={()=>{handleLocation(item.id)}}>
                 <View  style={styles.postLocationWrapper}>
                 <Icon name='map-pin' size={24} color='#BDBDBD' />
                 <Text  style={styles.postLocation}>{`${item.location}`.split(",")[0]}</Text>
                 </View>
+                </Pressable>
             </View>
         </View>
         }
