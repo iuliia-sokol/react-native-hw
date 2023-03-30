@@ -40,6 +40,12 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow the APP to use your location."
         }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Allow the APP to access your camera."
+        }
       ]
     ]
   }

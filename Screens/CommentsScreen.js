@@ -206,7 +206,7 @@ const styles = StyleSheet.create({
         position:'relative',
         alignSelf:'flex-end',
         width:'100%',
-        marginTop:32
+        marginTop:16,
     },
     commentInput:{
         width:'100%',

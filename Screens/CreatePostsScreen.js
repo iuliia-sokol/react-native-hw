@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react"; 
+import React, { useEffect, useState, useRef } from "react"; 
+import { Camera, CameraType } from "expo-camera";
+import * as MediaLibrary from "expo-media-library";
 import * as Location from 'expo-location';
 import uuid from 'react-native-uuid';
 import  Icon from "@expo/vector-icons/Feather";
@@ -16,6 +18,7 @@ import {
   Platform, 
   Alert,
   TextInput,
+  
   } from "react-native";
 import { imageHandler } from "../utils/imageHandler";
 import { getCity } from "../services/fetchCity";
@@ -34,6 +37,10 @@ const CreatePost=({ navigation, route })=> {
   const [disableClear, setDisableClear]=useState(true);
   const [posts, setPosts] =useState(params.posts);
   const [showKeyboard, setShowKeyboard] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [cameraRef, setCameraRef] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [photoTaken, setPhotoTaken] = useState(false)
 
   const textHandler = (text) =>{
     setText(text.trim());
@@ -80,7 +87,6 @@ const CreatePost=({ navigation, route })=> {
         navigation.navigate("Posts", {data})}
 }
 
-
   const handleDeletePost =(e)=>{
     e.preventDefault();
     resetForm()
@@ -102,6 +108,15 @@ const CreatePost=({ navigation, route })=> {
   }
 
   useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      await MediaLibrary.requestPermissionsAsync();
+
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
+  useEffect(() => {
     if (text && place && image) {
       setDisabled(false);
     }
@@ -115,10 +130,13 @@ const CreatePost=({ navigation, route })=> {
   }, [text, place, image]);
 
 
+
     useEffect(() => {
       if (getLocationPressed && location.latitude && location.longitude) {
+        
         const fetchData = async () => {    
           const data = await getCity(location.latitude, location.longitude)
+          console.log(data);
           setPlace(`${data.cityName}, ${data.country}`);
         }
       fetchData()  
@@ -134,6 +152,9 @@ const CreatePost=({ navigation, route })=> {
     }, [navigation, posts]);
 
 
+    if (hasPermission === false) {
+      Alert.alert("No access to camera")
+    }
 
     return (
       <TouchableWithoutFeedback onPress={handleKeyboard}>
@@ -142,18 +163,75 @@ const CreatePost=({ navigation, route })=> {
                 behavior={Platform.OS == "ios" && "padding" }
               >
         <View style={{...styles.addPostForm, paddingBottom: showKeyboard && Platform.OS == "android" ? 32 : 270}}>
-    
-        <View style={styles.addImage}>
+
+      {hasPermission && !photoTaken ? (
+      <Camera
+        style={styles.addImage}
+        type={type}
+        ref={(ref) => {
+          setCameraRef(ref);
+        }}
+         >
+        <View style={styles.picture}>
+          {/* <Pressable
+            style={styles.flipContainer}
+            onPress={() => {
+              setType(
+                type === Camera.Constants.Type.back
+                  ? Camera.Constants.Type.front
+                  : Camera.Constants.Type.back
+              );
+            }}
+          >
+            <Text style={{ fontSize: 18, marginBottom: 10, color: "black" }}>
+              Flip
+            </Text>
+          </Pressable> */}
+          <Pressable
+            style={styles.addImageBtn}
+            onPress={async () => {
+              if (cameraRef) {
+                const { uri } = await cameraRef.takePictureAsync();
+                await MediaLibrary.createAssetAsync(uri);
+                setImage(uri)
+                setPhotoTaken(true)
+              }
+            }}
+          >
+             <FontAwesome5 name="camera" size={20} color={image?"#FFFFFF":"#BDBDBD"} style={styles.addImageBtnIcon} />
+          </Pressable>
+        </View>
+      </Camera>)
+      : hasPermission && photoTaken ? (
+       <View style={styles.addImage}>
         {image? 
         <Image  style={styles.picture} source={{uri: image}}/> : null}
         <Pressable
                     style={image? {...styles.addImageBtn, backgroundColor:'rgba(255, 255, 255, 0.3)'} : styles.addImageBtn} 
-                    onPress={()=>imageHandler(setImage)}
+                    onPress={()=>{setPhotoTaken(false)}}
                     accessibilityLabel={"Add picture"}
                   >
                   <FontAwesome5 name="camera" size={20} color={image?"#FFFFFF":"#BDBDBD"} style={styles.addImageBtnIcon} />
                   </Pressable>
-        </View>
+        </View> 
+      ):
+      (
+        <View style={styles.addImage}>
+         {image? 
+         <Image  style={styles.picture} source={{uri: image}}/> : null}
+         <Pressable
+                     style={image? {...styles.addImageBtn, backgroundColor:'rgba(255, 255, 255, 0.3)'} : styles.addImageBtn} 
+                     onPress={()=>imageHandler(setImage)}
+                     accessibilityLabel={"Add picture"}
+                   >
+                   <FontAwesome5 name="camera" size={20} color={image?"#FFFFFF":"#BDBDBD"} style={styles.addImageBtnIcon} />
+                   </Pressable>
+         </View> 
+       )
+      }
+
+      
+
        {image? 
           <Pressable style={{alignSelf:'flex-start'}} onPress={()=>imageHandler(setImage)} accessibilityLabel={"Change picture"}>
                 <Text style={styles.addImageText}>Change photo</Text>
@@ -210,7 +288,7 @@ const CreatePost=({ navigation, route })=> {
         
         </KeyboardAvoidingView>
       </View>
-      </TouchableWithoutFeedback>
+     </TouchableWithoutFeedback>
     );
   }
 
@@ -253,7 +331,7 @@ const CreatePost=({ navigation, route })=> {
     picture:{
       width: 343,
       height: 240,
-      backgroundColor:"#E8E8E8",
+      // backgroundColor:"#E8E8E8",
       borderRadius: 8,
     },
     addImageText:{
@@ -314,7 +392,32 @@ const CreatePost=({ navigation, route })=> {
       marginTop:120,
       backgroundColor: "#FF6C00",
       borderRadius: 20,
-    }
+    },
+
+  flipContainer: {
+    flex: 0.3,
+    alignSelf: "flex-end",
+  },
+
+  takePhotoOut: {
+    borderWidth: 2,
+    borderColor: "white",
+    height: 50,
+    width: 50,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+  },
+
+  takePhotoInner: {
+    borderWidth: 2,
+    borderColor: "white",
+    height: 40,
+    width: 40,
+    backgroundColor: "black",
+    borderRadius: 50,
+  },
   });
 
   export default CreatePost;

@@ -121,10 +121,11 @@ import  Icon from "@expo/vector-icons/Feather";
         textAlign: "center",
     },
     postsList:{
-     paddingBottom:83
+        marginTop:32,
+     paddingBottom:50
     },
     postsListItem:{
-        marginTop:32,
+        marginBottom:32,
         display:'flex',
         flexDirection:'column',
         gap:8
