@@ -8,15 +8,14 @@ export const getCity = async (lat, long) => {
     let city = {
       cityName: null,
       country: null,
-      placeId: null,
     };
     try {
       const response = await Geocode.fromLatLng(`${lat}`, `${long}`);
-      const approximate = response.results.filter(
-        res => res.geometry.location_type === 'APPROXIMATE'
-      );
-  
-      city.placeId = approximate[0].place_id;
+      // const approximate = response.results.filter(
+      //   res => res.geometry.location_type === 'APPROXIMATE'
+      // );
+  i
+      // city.placeId = approximate[0].place_id;
   
       for (let i = 0; i < response.results[0].address_components.length; i++) {
         for (

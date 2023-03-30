@@ -39,7 +39,7 @@ const Login=({ navigation })=> {
       // Alert.alert("Credentials", `email: ${email} password: ${password}`);
       setEmail("");
       setPassword("");
-      navigation.navigate("Home", {data})
+      navigation.navigate("Home", {data: data})
     };
   
     const handleInputShow = () => {

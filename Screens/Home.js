@@ -7,8 +7,10 @@ import  Icon from "@expo/vector-icons/Feather";
 import CreatePost from "../Screens/CreatePostsScreen";
 import Profile from "../Screens/ProfileScreen";
 import Posts from "../Screens/PostsScreen";
-import { postsArray } from "../utils/posts";
 import Comments from "./CommentsScreen";
+import Map from "./MapScreen";
+import { postsArray } from "../utils/posts";
+
 
 
 const Tabs = createBottomTabNavigator();
@@ -16,10 +18,10 @@ const Tabs = createBottomTabNavigator();
 
 const Home = ({ navigation, route }) => {
     const {data} = route.params
-    const entries = new Map(data._parts);
-    const obj = Object.fromEntries(entries);
+    const obj = Object.fromEntries(data._parts);
+   
     const [posts, setPosts] = useState(postsArray);
-  
+
     // console.log(posts);
 
     const handleLogout =()=>{
@@ -30,14 +32,14 @@ const Home = ({ navigation, route }) => {
        
         <Tabs.Navigator
           screenOptions={({ route }) => ({
-            tabBarItemStyle: route.name === "Comment"?  {display:'none'}:
+            tabBarItemStyle: route.name === "Comment" || route.name === "Map" ?  {display:'none'}:
               {maxWidth: 70, width: 70, height: 40, display:'flex', justifyContent:'center', alignItems:"center", borderRadius:20 },
             tabBarActiveTintColor: "#FFFFFF",
             tabBarInactiveTintColor: "rgba(33, 33, 33, 0.8)",
             tabBarActiveBackgroundColor:"#FF6C00",
             tabBarInactiveBackgroundColor:'transparent',
             tabBarIconStyle:{strokeWidth: 1},
-            tabBarStyle: { display:route.name === 'Create post'|| route.name === 'Comment'? 'none':'flex', height:83, paddingTop:9, paddingBottom:34, paddingHorizontal:81},
+            tabBarStyle: { display:route.name === 'Create post'|| route.name === 'Comment' || route.name === 'Map'? 'none':'flex', height:83, paddingTop:9, paddingBottom:34, paddingHorizontal:81},
             tabBarShowLabel: false,
             tabBarIcon: ({ focused, color }) => {
 
@@ -83,6 +85,15 @@ const Home = ({ navigation, route }) => {
           />
          <Tabs.Screen name="Profile" component={Profile} initialParams={{...obj, posts}} options={{headerShown: false}}/>
          <Tabs.Screen name="Comment" component={Comments} options={{
+                        headerTitleAlign:'center',
+                        headerStyle: styles.headerBox,
+                        headerPressColor:'#FF6C00',
+                        headerTitleStyle: styles.headerTitle,                        
+                        headerRightContainerStyle:{paddingRight:16},
+                        headerLeftContainerStyle:{paddingLeft:16},
+                        headerLeft: () => <HeaderBackButton backImage={ ()=> <Icon name='arrow-left' size={24} color='#BDBDBD'/>} onPress={() => navigation.navigate('Posts')}/>,
+                      }} />
+          <Tabs.Screen name="Map" component={Map} options={{
                         headerTitleAlign:'center',
                         headerStyle: styles.headerBox,
                         headerPressColor:'#FF6C00',

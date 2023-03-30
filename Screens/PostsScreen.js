@@ -26,6 +26,12 @@ import  Icon from "@expo/vector-icons/Feather";
          );
        }
 
+       const handleLocation = (id)=> {
+        navigation.navigate('Map',
+           {params,id},
+         );
+       }
+
     return (
       <View style={styles.container}>
        <View style={styles.userData}>
@@ -58,10 +64,12 @@ import  Icon from "@expo/vector-icons/Feather";
                 <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
                 </View>
                 </Pressable>
+                <Pressable onPress={()=> {handleLocation(item.id)}}>
                 <View  style={styles.postLocationWrapper}>
                 <Icon name='map-pin' size={24} color='#BDBDBD' />
                 <Text  style={styles.postLocation}>{item.location}</Text>
                 </View>
+                </Pressable>
             </View>
         </View>
         }
