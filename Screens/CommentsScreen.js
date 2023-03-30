@@ -116,6 +116,7 @@ const Comments= ({ navigation, route })=> {
          value={text}
          multiline
          autoFocus={false}
+         selectionColor='#FF6C00'
          blurOnSubmit={true}
          placeholderTextColor='#BDBDBD'
          onChangeText={textHandler}
@@ -213,7 +214,7 @@ const styles = StyleSheet.create({
         width:'100%',
         paddingLeft:16,
         paddingRight:50,
-        paddingVertical:16,
+        paddingTop:16,
         height:50,
         backgroundColor:'#F6F6F6',
         borderRadius:100,
@@ -222,7 +223,7 @@ const styles = StyleSheet.create({
         color: "#BDBDBD",
         fontWeight: 500,
         lineHeight: 19,
-        textAlign: "left",
+        textAlignVertical: 'center'
     },
     addCommentBtn:{
         position:'absolute',

@@ -84,7 +84,7 @@ const Login=({ navigation })=> {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={email}
-                    //   autoFocus={true}
+                      selectionColor='#FF6C00'
                       onChangeText={emailHandler}
                       onFocus={() => {
                         setShowKeyboard(true);
@@ -103,6 +103,7 @@ const Login=({ navigation })=> {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={password}
+                      selectionColor='#FF6C00'
                       onChangeText={passwordHandler}
                       onFocus={() => {
                         setShowKeyboard(true);

@@ -115,7 +115,7 @@ const Registration = ({ navigation }) => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={login}
-                    //   autoFocus={true}
+                      selectionColor='#FF6C00'
                       onChangeText={loginHandler}
                       onFocus={() => {
                         setShowKeyboard(true);
@@ -135,6 +135,7 @@ const Registration = ({ navigation }) => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={email}
+                      selectionColor='#FF6C00'
                       onChangeText={emailHandler}
                       onFocus={() => {
                         setShowKeyboard(true);
@@ -154,6 +155,7 @@ const Registration = ({ navigation }) => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={password}
+                      selectionColor='#FF6C00'
                       onChangeText={passwordHandler}
                       onFocus={() => {
                         setShowKeyboard(true);

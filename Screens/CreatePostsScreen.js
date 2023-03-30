@@ -153,6 +153,7 @@ useEffect(() => {
           <View style={styles.inputWrapper}>
                     <TextInput
                       value={text}
+                      selectionColor='#FF6C00'
                       onChangeText={textHandler}
                       onFocus={() => {
                         setShowKeyboard(true);
@@ -167,6 +168,7 @@ useEffect(() => {
                   </Pressable>
                     <TextInput
                       value={place}
+                      selectionColor='#FF6C00'
                       onChangeText={locationHandler}
                       onFocus={() => {
                         setShowKeyboard(true);
