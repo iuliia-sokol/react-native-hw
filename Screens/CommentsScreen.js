@@ -11,6 +11,7 @@ import {
     Keyboard,
     TouchableWithoutFeedback,
     Platform, 
+    KeyboardAvoidingView
 } from "react-native";
 import uuid from 'react-native-uuid';
 import { AntDesign } from '@expo/vector-icons'; 
@@ -68,22 +69,31 @@ const Comments= ({ navigation, route })=> {
               navigation.setParams(params.posts)
       }
 
-    //   console.log('posts',posts, 'comments', comments);
-
-    return ( postSearched &&
-        <TouchableWithoutFeedback onPress={handleKeyboard}>
-        <View style={styles.container}>
-
+    return ( 
+    <View style={styles.container} >
+        <KeyboardAvoidingView
+        keyboardVerticalOffset={40}
+        behavior='position'              >
+       <TouchableWithoutFeedback onPress={handleKeyboard}>
         <View style={styles.imageWrapper}>
         <Image style={styles.postImage} source={{uri: postSearched.file}}/>
         </View>
-
+        </TouchableWithoutFeedback>
+        
         <View style={styles.dataWrapper}>
-        <SafeAreaView style={showKeyboard? {...styles.postsList, display:'none', minHeight:0} : styles.postsList}>
 
+        <SafeAreaView  style={styles.postsList}>
         <FlatList
+               ListEmptyComponent={() => (postSearched.comments.length <=0 ? 
+                <View style={styles.emptyMessageBox}> 
+                    <Text style={styles.emptyMessageStyle}>No comments added yet...</Text> 
+                </View>
+            
+            : null)
+          }
         data={postSearched.comments}
         renderItem={({ item }) => 
+        <TouchableWithoutFeedback onPress={handleKeyboard}>
         <View style={styles.commentBox}>
             <View style={styles.commentTextWrapper}
             >
@@ -95,17 +105,26 @@ const Comments= ({ navigation, route })=> {
             </View>
             
         </View>
+        </TouchableWithoutFeedback>
         }
         keyExtractor={(item) => item.id}
       />
       </SafeAreaView>
+
         <View style={{...styles.commentInputWrapper, paddingBottom: showKeyboard && Platform.OS == "android" ? 32 :16}}>
         <TextInput style={text? {...styles.commentInput, color:'#212121'}: styles.commentInput}
          value={text}
+         multiline
+         autoFocus={false}
+         blurOnSubmit={true}
+         placeholderTextColor='#BDBDBD'
          onChangeText={textHandler}
          onFocus={() => {
            setShowKeyboard(true);
          }}
+         onBlur={() => {
+            setShowKeyboard(false);
+          }}
          placeholder="Comment...">
 
         </TextInput>
@@ -113,11 +132,13 @@ const Comments= ({ navigation, route })=> {
         <AntDesign name="arrowup" size={20} color="#ffffff" />
         </Pressable>
       </View>
+
+
       </View>
      
-     
+      </KeyboardAvoidingView>
     </View>
-    </TouchableWithoutFeedback>
+ 
     )
 }
 
@@ -131,8 +152,6 @@ const styles = StyleSheet.create({
       paddingTop:32,
       paddingBottom:16
     },
-    box:{
-},
     dataWrapper:{
 },
     imageWrapper:{
@@ -144,13 +163,13 @@ const styles = StyleSheet.create({
         borderRadius:8,
     },
     postsList:{
-        maxHeight:'65%',
-        minHeight:'65%',
+        marginTop:24,
+        maxHeight:'60%',
+        minHeight:'60%',
         width:'100%',
-        display:'flex'
     },
     commentBox:{
-        marginTop:24,
+       marginBottom:24,
        display:'flex',
        flexDirection:'row',
        justifyContent:'space-between',
@@ -169,7 +188,6 @@ const styles = StyleSheet.create({
         fontWeight: 400,
         lineHeight: 18,
     },
-
     commentDate:{
         fontFamily: "Roboto-Regular",
         fontSize: 10,
@@ -193,7 +211,9 @@ const styles = StyleSheet.create({
     },
     commentInput:{
         width:'100%',
-       padding:16,
+        paddingLeft:16,
+        paddingRight:50,
+        paddingVertical:16,
         height:50,
         backgroundColor:'#F6F6F6',
         borderRadius:100,
@@ -215,6 +235,20 @@ const styles = StyleSheet.create({
         display:'flex',
         justifyContent:'center',
         alignItems:'center'
+    },
+    emptyMessageBox:{
+        marginTop:24,
+        display:'flex',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    emptyMessageStyle:{
+        fontFamily: "Roboto-Medium",
+        fontSize: 16,
+        color: "#212121",
+        fontWeight: 500,
+        lineHeight: 19,
+        textAlign: "center",
     }
 })
 export default Comments;
