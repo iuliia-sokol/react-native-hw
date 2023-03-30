@@ -5,8 +5,15 @@ import * as Location from "expo-location";
 
 const Map = ({ navigation, route }) => {
   let params = route.params
-  console.log('map params', params);
+  // console.log('map params', params);
+  
+  const [posts, setPosts]=useState(params.params.posts)
   const [location, setLocation] = useState(null);
+  const postSearched = posts.find(item=>item.id===params.id)
+
+  // console.log(postSearched);
+
+
 
   useEffect(() => {
     (async () => {
@@ -14,7 +21,6 @@ const Map = ({ navigation, route }) => {
       if (status !== "granted") {
         console.log("Permission to access location was denied");
       }
-
       let location = await Location.getCurrentPositionAsync({});
       const coords = {
         latitude: location.coords.latitude,
@@ -25,22 +31,35 @@ const Map = ({ navigation, route }) => {
   }, []);
 
   return (
-    <View style={styles.container}>
+   postSearched.coordinates.latitude &&  postSearched.coordinates.longitude ? 
+   (<View style={styles.container}>
       <MapView
         style={styles.mapStyle}
         region={{
-          ...location,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
+          ...postSearched.coordinates,
         }}
         showsUserLocation={true}
       >
-        {location && (
-          <Marker title="You are here" coordinate={location} description="Your location" />
+         {postSearched && (
+          <Marker title={postSearched.text} coordinate={postSearched.coordinates} description={postSearched.location?? postSearched.location} />
         )}
       </MapView>
-    </View>
-  );
+    </View>)
+   : 
+ ( <MapView
+  style={styles.mapStyle}
+  region={{
+    ...location,
+    // latitudeDelta: 0.0922,
+    // longitudeDelta: 0.0421,
+  }}
+  showsUserLocation={true}
+>
+  {location && (
+    <Marker title="You are here" coordinate={location} description="Your current location" />
+  )} 
+</MapView>)
+)
 };
 
 const styles = StyleSheet.create({
