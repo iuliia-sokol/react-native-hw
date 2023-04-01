@@ -7,6 +7,7 @@ import Login from "./Screens/LoginScreen";
 import Register from "./Screens/RegistrationScreen";
 import Home from "./Screens/Home";
 import useCachedResources from "./hooks/useCachedResourses";
+import { store } from "./redux/store";
 
 
 
