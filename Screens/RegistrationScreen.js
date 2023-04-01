@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"; 
+import { useDispatch, useSelector } from 'react-redux';
 import  Icon from "@expo/vector-icons/Feather";
 import {
     TouchableWithoutFeedback,
@@ -8,21 +9,22 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     Platform,
-    // Alert,
     Pressable,
     ImageBackground,
     Text,
     Image
   } from "react-native";
 import { imageHandler } from "../utils/imageHandler";
+import { signUp } from "../redux/auth/authOperations";
 
 
 
 const Registration = ({ navigation }) => {
+    const dispatch = useDispatch()
     const [login, setLogin] = useState('')
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [image, setImage] = useState(null);
+    const [image, setImage] = useState('');
     const [disabled, setDisabled] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showKeyboard, setShowKeyboard] = useState(false);
@@ -30,29 +32,41 @@ const Registration = ({ navigation }) => {
 
 
     const loginHandler = (text) =>{
-        setLogin(text.trim());
+        setLogin(text);
     }
     const emailHandler = (text) => {
-        setEmail(text.trim());
+        setEmail(text);
       };
 
       const passwordHandler = (text) => {
         setPassword(text.trim());
       };
     
-      const onRegister = (e) => {
-        e.preventDefault();
-        const data = new FormData();
-        data.append('login', login);
-        data.append('email', email);
-        data.append('password', password);
-        data.append('file', image);
-        // console.log(data);
-        // Alert.alert("Credentials:", `login: ${login} email: ${email} password: ${password}`)
+      const resetForm =()=>{
         setLogin('')
         setEmail("");
         setPassword("");
-        navigation.navigate("Home", {data: data})
+        setImage(null)
+      }
+
+      const onRegister = (e) => {
+        e.preventDefault();
+        // const data = new FormData();
+        // data.append('login', login);
+        // data.append('email', email);
+        // data.append('password', password);
+        // data.append('file', image);
+
+        const user = {
+          login: login.trim(), 
+          email: email.trim(), 
+          password, 
+          image
+        }
+        
+        dispatch(signUp(user))
+        resetForm()
+        // navigation.navigate("Home", {data: data})
         
       };
     
@@ -115,6 +129,7 @@ const Registration = ({ navigation }) => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={login}
+                      returnKeyType="next"
                       selectionColor='#FF6C00'
                       onChangeText={loginHandler}
                       onFocus={() => {
@@ -135,6 +150,11 @@ const Registration = ({ navigation }) => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={email}
+                      returnKeyType="next"
+                      autoCompleteType="email"
+                      textContentType="emailAddress"
+                      keyboardType="email-address"
+                      autoCapitalize='none'
                       selectionColor='#FF6C00'
                       onChangeText={emailHandler}
                       onFocus={() => {
@@ -142,7 +162,6 @@ const Registration = ({ navigation }) => {
                         setFocused("email");
                       }}
                       onBlur={() => {
-                       
                         setFocused("");
                       }}
                       placeholder="Email address"
@@ -155,6 +174,7 @@ const Registration = ({ navigation }) => {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={password}
+                      returnKeyType="done"
                       selectionColor='#FF6C00'
                       onChangeText={passwordHandler}
                       onFocus={() => {

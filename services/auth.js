@@ -1,8 +1,10 @@
-import { auth } from "../config";
+import { auth } from "../firebase/config";
 
-export const registerDB = async () => {
+export const registerDB = async ({displayName, image, email, password}) => {
     try {
-      await auth.createUserWithEmailAndPassword("email", "password");
+      const user = await auth.createUserWithEmailAndPassword(email, password);
+    //   console.log(user);
+      return user.user
     } catch (error) {
       throw error;
     }
@@ -10,15 +12,18 @@ export const registerDB = async () => {
 
   export const authStateChanged = async () => {
     try {
-      await auth.onAuthStateChanged((user) => setIsAuth(user));
+        const user = await auth.onAuthStateChanged((user) =>{ setIsAuth(user)});
+        console.log(user);
     } catch (error) {
       throw error;
     }
   };
 
-  export const loginDB = async () => {
+  export const loginDB = async ({email, password}) => {
     try {
-      await auth.signInWithEmailAndPassword("email", "password");
+     const user = await auth.signInWithEmailAndPassword(email, password);
+     console.log(user);
+     return user.user
     } catch (error) {
       throw error;
     }
@@ -30,7 +35,7 @@ export const registerDB = async () => {
   
     // якщо такий користувач знайдений
     if (user) {
-  
+    console.log(user);
     // оновлюємо його профайл
       user.updateProfile({
         displayName: "Bob",

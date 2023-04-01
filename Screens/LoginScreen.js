@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"; 
-
+import { useDispatch, useSelector } from 'react-redux';
 import {
     TouchableWithoutFeedback,
     StyleSheet,
@@ -8,13 +8,14 @@ import {
     Keyboard,
     KeyboardAvoidingView,
     Platform,
-    Alert,
     Pressable,
     ImageBackground,
     Text,
   } from "react-native";
+import { signIn } from "../redux/auth/authOperations";
 
 const Login=({ navigation })=> {
+    const dispatch = useDispatch()
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [disabled, setDisabled] = useState(true);
@@ -30,16 +31,24 @@ const Login=({ navigation })=> {
       setPassword(text.trim());
     };
   
-    const onLogin = (e) => {
-      e.preventDefault();
-      const data = new FormData();
-      data.append('email', email);
-      data.append('password', password);
-      console.log(JSON.stringify(data));
-      // Alert.alert("Credentials", `email: ${email} password: ${password}`);
+    const resetForm = ()=>{
       setEmail("");
       setPassword("");
-      navigation.navigate("Home", {data: data})
+    }
+
+    const onLogin = (e) => {
+      e.preventDefault();
+      // const data = new FormData();
+      // data.append('email', email);
+      // data.append('password', password);
+      // console.log(JSON.stringify(data));
+      const user = {
+        email: email.trim(), 
+        password, 
+      }
+      dispatch(signIn(user))
+      resetForm()
+      // navigation.navigate("Home", {data: data})
     };
   
     const handleInputShow = () => {
@@ -84,6 +93,11 @@ const Login=({ navigation })=> {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={email}
+                      returnKeyType="next"
+                      autoCompleteType="email"
+                      textContentType="emailAddress"
+                      keyboardType="email-address"
+                      autoCapitalize='none'
                       selectionColor='#FF6C00'
                       onChangeText={emailHandler}
                       onFocus={() => {
@@ -103,6 +117,7 @@ const Login=({ navigation })=> {
                   <View style={styles.inputWrapper}>
                     <TextInput
                       value={password}
+                      returnKeyType="done"
                       selectionColor='#FF6C00'
                       onChangeText={passwordHandler}
                       onFocus={() => {

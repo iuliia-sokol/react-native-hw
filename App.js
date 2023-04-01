@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { Provider } from "react-redux";
+import Container from 'toastify-react-native';
 import 'expo-dev-menu';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -8,6 +10,8 @@ import Register from "./Screens/RegistrationScreen";
 import Home from "./Screens/Home";
 import useCachedResources from "./hooks/useCachedResourses";
 import { store } from "./redux/store";
+import { currentState } from "./redux/auth/authOperations";
+import { Alert } from "react-native";
 
 
 
@@ -20,21 +24,44 @@ const fontsLoaded = {
 const MainStack = createStackNavigator();
 
 export default () => {
+  return (
+    <Provider store={store}> 
+      <App />
+    </Provider>
+  )
+}
 
+
+const App = () => {
+  // const dispatch = useDispatch()
+  const [user, setUser] = useState(null)
   const isLoadingComplete = useCachedResources(fontsLoaded);
+
+//  useEffect(()=>{
+//   dispatch(currentState())
+  
+//  },[])
+
   if (!isLoadingComplete) {
-    return null;
+    return  null
   } else {
   return (
-    <Provider store={store}>
       <NavigationContainer>
+         <Container position="center" style={{
+                borderRadius: 20,
+                fontSize: 8,
+                width: 350,
+                height: 100,
+            }} 
+            textStyle={{fontSize:8}}
+            duration={5000} animationStyle={'zoomInOut'}/>
+            
          <MainStack.Navigator initialRouteName="Registration">
          <MainStack.Screen name="Registration" component={Register} />
          <MainStack.Screen name="Login" component={Login} />
          <MainStack.Screen name="Home" component={Home} options={{headerShown:false}}/>
          </MainStack.Navigator>
       </NavigationContainer>
-      </Provider>
   );
   }
 }
