@@ -7,10 +7,9 @@ import { authStateChanged, getCurrentUserInfo, loginDB, registerDB } from '../..
 export const signUp = createAsyncThunk(
     'auth/signup',
     async (user, { rejectWithValue }) => {
-        // console.log('user', user);
       try {
-        const { login, email, password } = user;
-        const result = await registerDB({email: email,password: password, displayName:login});
+        const { login, email, password, image } = user;
+        const result = await registerDB({email: email,password: password, displayName:login, image});
         // console.log('register', result);
         return result.multiFactor.user;
       } catch (error) {

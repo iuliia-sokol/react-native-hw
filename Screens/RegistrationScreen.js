@@ -24,7 +24,7 @@ const Registration = ({ navigation }) => {
     const [login, setLogin] = useState('')
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(null);
     const [disabled, setDisabled] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
     const [showKeyboard, setShowKeyboard] = useState(false);
@@ -56,7 +56,7 @@ const Registration = ({ navigation }) => {
         // data.append('email', email);
         // data.append('password', password);
         // data.append('file', image);
-
+     
         const user = {
           login: login.trim(), 
           email: email.trim(), 
