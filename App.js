@@ -1,4 +1,5 @@
 import React from "react";
+import { Provider } from "react-redux";
 import 'expo-dev-menu';
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -24,6 +25,7 @@ export default () => {
     return null;
   } else {
   return (
+    <Provider store={store}>
       <NavigationContainer>
          <MainStack.Navigator initialRouteName="Registration">
          <MainStack.Screen name="Registration" component={Register} />
@@ -31,7 +33,7 @@ export default () => {
          <MainStack.Screen name="Home" component={Home} options={{headerShown:false}}/>
          </MainStack.Navigator>
       </NavigationContainer>
-  
+      </Provider>
   );
   }
 }
