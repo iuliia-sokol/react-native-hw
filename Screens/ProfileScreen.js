@@ -1,27 +1,41 @@
 import React, { useEffect, useState } from "react";
-import {ImageBackground, View, Image, Text, StyleSheet, Pressable, SafeAreaView,
-  FlatList, } from "react-native";
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  ImageBackground, 
+  View, 
+  Image, 
+  Text, 
+  StyleSheet, 
+  Pressable, 
+  SafeAreaView,
+  FlatList, 
+} from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
+import { getAvatar, getEmail, getName, getPosts } from "../redux/auth/authSelectors";
 
 
 
 const Profile= ({ navigation, route })=> {
-  let params = route.params
+  const dispatch = useDispatch()
+  // let params = route.params
 
-  const [image, setImage] = useState(params.file)
-  const [name,setName]= useState(params.login)
-  const [posts, setPosts]=useState(params.posts)
+  // const [image, setImage] = useState(params.file)
+  // const [name,setName]= useState(params.login)
+  // const [posts, setPosts]=useState(params.posts)
+
+  const image = useSelector(getAvatar)
+  const name = useSelector(getName)
+  const posts = useSelector(getPosts)
    
   const handleLogout =()=>{
-    alert("Exit")
-    navigation.navigate('Login')
-
+    dispatch(signOut())
+    // navigation.navigate('Login')
    }
 
    const handleLike = (id) =>{
     const liked = posts.find(item => item.id===id)
     liked.likes++
-    navigation.setParams(posts)
+    // navigation.setParams(posts)
     // console.log(liked);
    }
 

@@ -25,7 +25,7 @@ import { getCity } from "../services/fetchCity";
 
 
 const CreatePost=({ navigation, route })=> {
-  const params = route.params
+  // const params = route.params
   // console.log(params);
   const [image, setImage] = useState(null);
   const [text, setText] = useState('')
@@ -35,7 +35,7 @@ const CreatePost=({ navigation, route })=> {
   const [errorMsg, setErrorMsg] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [disableClear, setDisableClear]=useState(true);
-  const [posts, setPosts] =useState(params.posts);
+  // const [posts, setPosts] =useState(params.posts);
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -145,11 +145,11 @@ const CreatePost=({ navigation, route })=> {
     }, [location.latitude, location.longitude, getLocationPressed]);
 
 
-    useEffect(() => {
-      navigation.setOptions({
-        posts: posts,
-      });
-    }, [navigation, posts]);
+    // useEffect(() => {
+    //   navigation.setOptions({
+    //     posts: posts,
+    //   });
+    // }, [navigation, posts]);
 
 
     if (hasPermission === false) {
