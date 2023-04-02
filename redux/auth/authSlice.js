@@ -20,7 +20,6 @@ const pending = state => {
       avatar: null,
       posts: []
     },
-    stateChanged: false
   };
 
   export const authSlice = createSlice({

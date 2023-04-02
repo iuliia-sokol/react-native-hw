@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react"; 
+import { useDispatch, useSelector } from 'react-redux';
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from 'expo-location';
@@ -22,17 +23,19 @@ import {
   } from "react-native";
 import { imageHandler } from "../utils/imageHandler";
 import { getCity } from "../services/fetchCity";
+import { getUid } from "../redux/auth/authSelectors";
+import { addPost } from "../redux/dashboard/dbOperations";
 
 
 const CreatePost=({ navigation, route })=> {
-  // const params = route.params
-  // console.log(params);
+  const dispatch = useDispatch()
+  const userId = useSelector(getUid)
   const [image, setImage] = useState(null);
   const [text, setText] = useState('')
   const [location, setLocation] = useState({latitude:'', longitude:''})
   const [getLocationPressed, setGetLocationPressed] = useState(false)
   const [place, setPlace]= useState('')
-  const [errorMsg, setErrorMsg] = useState(null);
+
   const [disabled, setDisabled] = useState(true);
   const [disableClear, setDisableClear]=useState(true);
   // const [posts, setPosts] =useState(params.posts);
@@ -69,22 +72,37 @@ const CreatePost=({ navigation, route })=> {
     getLocation()
   }
   if(location.latitude && location.longitude)  { 
-      const data = new FormData();
-      data.append('text', text);
-      data.append('location', location);
-      data.append('file', image);
+      const id=Date.now().toString()
+      // const data = new FormData();
+      // data.append('text', text);
+      // data.append('location', location);
+      // data.append('file', image);
+      const data = {
+        userId: userId,
+        comments:[],
+        likes:0,
+        image,
+        location: place,
+        coordinates: {...location},
+        text:text
+      }
+
+      console.log(data);
+      dispatch(addPost(data))
         resetForm()
-        setPosts(posts.unshift({
-          id: uuid.v4(),
-          comments:[],
-          likes:0,
-          file:image,
-          location: place,
-          coordinates: {...location},
-          text:text
-        }))
+        // setPosts(posts.unshift({
+        //   id: uuid.v4(),
+        //   comments:[],
+        //   likes:0,
+        //   file:image,
+        //   location: place,
+        //   coordinates: {...location},
+        //   text:text
+        // }))
         // console.log(data);
-        navigation.navigate("Posts", {data})}
+        // navigation.navigate("Posts", {data})
+      
+      }
 }
 
   const handleDeletePost =(e)=>{
@@ -98,7 +116,7 @@ const CreatePost=({ navigation, route })=> {
 
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
-        setErrorMsg('Permission to access location was denied');
+        Alert.alert('Permission to access location was denied');
         return;
       }
 

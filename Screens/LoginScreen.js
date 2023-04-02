@@ -38,17 +38,12 @@ const Login=({ navigation })=> {
 
     const onLogin = (e) => {
       e.preventDefault();
-      // const data = new FormData();
-      // data.append('email', email);
-      // data.append('password', password);
-      // console.log(JSON.stringify(data));
       const user = {
         email: email.trim(), 
         password, 
       }
       dispatch(signIn(user))
       resetForm()
-      // navigation.navigate("Home", {data: data})
     };
   
     const handleInputShow = () => {

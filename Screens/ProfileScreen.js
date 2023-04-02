@@ -11,7 +11,7 @@ import {
   FlatList, 
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
-import { getAvatar, getEmail, getName, getPosts } from "../redux/auth/authSelectors";
+import { getAvatar, getName, getPosts } from "../redux/auth/authSelectors";
 
 
 
