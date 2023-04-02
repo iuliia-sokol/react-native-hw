@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signIn, signUp } from './authOperations';
+import { signIn, signOut, signUp } from './authOperations';
 
 const pending = state => {
     state.isUserFetching = true;
@@ -28,11 +28,11 @@ const pending = state => {
     extraReducers: builder =>
       builder
         .addCase(signUp.fulfilled, (state, { payload }) => {
-          // console.log("payload register",payload);
+          console.log("payload register", payload);
           state.userData.uid=payload.uid
           state.userData.email = payload.email;
           state.userData.name = payload.displayName;
-          state.userData.avatar = payload.photoURL;
+          state.userData.avatar = payload.photo;
           state.isLoggedIn = true;
           state.isUserFetching = false;
         })
@@ -55,8 +55,7 @@ const pending = state => {
         //   state.accessToken = payload.accessToken;
         //   state.isUserFetching = false;
         // })
-        // .addCase(logOut.fulfilled, () => ({ ...initialState }))
-  
+        .addCase(signOut.fulfilled, () => ({ ...initialState }))
         .addCase(signUp.pending, pending)
         .addCase(signIn.pending, pending)
         // .addCase(getCurrentUser.pending, pending)

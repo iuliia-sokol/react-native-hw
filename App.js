@@ -11,7 +11,6 @@ import Home from "./Screens/Home";
 import useCachedResources from "./hooks/useCachedResourses";
 import { store } from "./redux/store";
 import { currentState } from "./redux/auth/authOperations";
-import { Alert } from "react-native";
 
 
 
@@ -24,27 +23,32 @@ const fontsLoaded = {
 const MainStack = createStackNavigator();
 
 export default () => {
+  const isLoadingComplete = useCachedResources(fontsLoaded);
+
+  if (!isLoadingComplete) {
+    return  null
+  } else {
+  
   return (
     <Provider store={store}> 
       <App />
     </Provider>
   )
 }
+}
 
 
 const App = () => {
   // const dispatch = useDispatch()
   const [user, setUser] = useState(null)
-  const isLoadingComplete = useCachedResources(fontsLoaded);
+ 
 
 //  useEffect(()=>{
 //   dispatch(currentState())
   
 //  },[])
 
-  if (!isLoadingComplete) {
-    return  null
-  } else {
+
   return (
       <NavigationContainer>
          <Container position="center" style={{
@@ -64,5 +68,5 @@ const App = () => {
       </NavigationContainer>
   );
   }
-}
+
 

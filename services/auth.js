@@ -1,12 +1,11 @@
 // import { Platform } from "react-native";
-import { auth, storage } from "../firebase/config";
+import { auth, storage, db } from "../firebase/config";
 
 export const registerDB = async ({displayName, image, email, password}) => {
     try {
       const user = await auth.createUserWithEmailAndPassword(email, password);
    
    const uploadImage = async(uri, user) => {
-    console.log('user',user);
     let URL;
     try{
         const response = await fetch(uri);
@@ -26,7 +25,8 @@ export const registerDB = async ({displayName, image, email, password}) => {
    const url = await uploadImage(image, user.user.multiFactor.user)
 
    const updatedUser = await getCurrentUserInfo(displayName, url)
-//    console.log("updatedUser", updatedUser);
+
+      console.log("updatedUser", updatedUser);
       return updatedUser
     } catch (error) {
       throw error;
@@ -44,16 +44,24 @@ export const registerDB = async ({displayName, image, email, password}) => {
   };
 
   export const getCurrentUserInfo = async (displayName, url) => {
-    // console.log("displayName, photoURL", displayName, url);
     const user = await auth.currentUser;
 
     if (user) {
-      user.updateProfile({
+    await user.updateProfile({
         displayName: displayName,
         photoURL: url,
       });
-      return user
+
+      const newUser ={ 
+        uid: user.uid,
+        photo:user.photoURL,
+        email: user.email,
+        displayName: user.displayName,
+      }
+    // console.log('newUser', newUser);
+      return newUser
     }
+    return
   };
 
   export const authStateChanged = async () => {
@@ -62,5 +70,13 @@ export const registerDB = async ({displayName, image, email, password}) => {
         console.log(user);
     } catch (error) {
       throw error;
+    }
+  };
+
+  export const logOut = () => async () => {
+    try {
+      await auth.signOut()
+    } catch (error) {
+        throw error;
     }
   };

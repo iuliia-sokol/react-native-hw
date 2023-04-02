@@ -1,17 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Toast } from 'toastify-react-native';
-import { authStateChanged, getCurrentUserInfo, loginDB, registerDB } from '../../services/auth';
+import { authStateChanged, getCurrentUserInfo, loginDB, registerDB, logOut } from '../../services/auth';
 
 
 
 export const signUp = createAsyncThunk(
     'auth/signup',
     async (user, { rejectWithValue }) => {
+
       try {
         const { login, email, password, image } = user;
         const result = await registerDB({email: email,password: password, displayName:login, image});
-        // console.log('register', result);
-        return result.multiFactor.user;
+        // console.log('register result from operations', result);
+
+        return result;
       } catch (error) {
         console.dir({error})
         Toast.error(`${error.code}`);
@@ -27,8 +29,22 @@ export const signUp = createAsyncThunk(
       try {
         const { email, password } = user;
         const result = await loginDB({ email: email, password:password});
-        console.log('login', result);
-        return result.multiFactor.user;
+        // console.log('login', result);
+        return result;
+      } catch (error) {
+        console.dir({error})
+        Toast.error(`${error.code}`);
+        return rejectWithValue(error);
+      }
+    }
+  );
+
+  export const signOut = createAsyncThunk(
+    'auth/signout',
+    async (_, { rejectWithValue }) => {
+      try {
+        await logOut();
+        return;
       } catch (error) {
         console.dir({error})
         Toast.error(`${error.code}`);
