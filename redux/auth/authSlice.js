@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { signIn, signOut, signUp } from './authOperations';
+import { currentState, signIn, signOut, signUp } from './authOperations';
 
 const pending = state => {
     state.isUserFetching = true;
@@ -18,6 +18,7 @@ const pending = state => {
       email: null,
       name: null,
       avatar: null,
+      posts: []
     },
     stateChanged: false
   };
@@ -45,24 +46,18 @@ const pending = state => {
           state.isLoggedIn = true;
           state.isUserFetching = false;
         })
-        // .addCase(updateUserInfo.fulfilled, (state, { payload }) => {
-        //   state.userData.name = payload.user.name;
-        //   state.userData.avatar = payload.user.avatarURL;
-        // })
-        // .addCase(getCurrentUser.fulfilled, (state, { payload }) => {
-        //   state.userData.name = payload.user.name;
-        //   state.userData.avatar = payload.user.avatarURL;
-        //   state.accessToken = payload.accessToken;
-        //   state.isUserFetching = false;
-        // })
+        .addCase(currentState.fulfilled, (state, { payload }) => {
+          state.userData.uid=payload.currentUser.uid
+          state.userData.email = payload.currentUser.email;
+          state.userData.name = payload.currentUser.displayName;
+          state.userData.avatar = payload.currentUser.photo;
+          state.isLoggedIn = payload.loggedIn;
+        })
         .addCase(signOut.fulfilled, () => ({ ...initialState }))
         .addCase(signUp.pending, pending)
         .addCase(signIn.pending, pending)
-        // .addCase(getCurrentUser.pending, pending)
   
         .addCase(signUp.rejected, rejected)
-
-        // .addCase(getCurrentUser.rejected, () => ({ ...initialState }))
         .addCase(signIn.rejected, rejected),
   });
   

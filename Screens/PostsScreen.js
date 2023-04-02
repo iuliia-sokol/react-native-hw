@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { 
     View,
     Image, 
@@ -9,16 +10,21 @@ import {
     Pressable,
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
+import { getAvatar, getEmail, getName, getPosts } from "../redux/auth/authSelectors";
 
 
 
   const Posts=({ navigation, route })=> {
-    const params = route.params
+    // const params = route.params
     // console.log(params);
-    const [image, setImage] = useState(params.file)
-    const [name,setName]= useState(params.login)
-    const [email,setEmail]=useState(params.email)
-    const [posts,setPosts]=useState(params.posts)
+    // const [image, setImage] = useState(params.file)
+    // const [name,setName]= useState(params.login)
+    // const [email,setEmail]=useState(params.email)
+    // const [posts,setPosts]=useState(params.posts)
+    const image = useSelector(getAvatar)
+    const name = useSelector(getName)
+    const email = useSelector(getEmail)
+    const posts = useSelector(getPosts)
 
     const handleComment = (id) =>{
         navigation.navigate('Comment',

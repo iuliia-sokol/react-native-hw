@@ -58,16 +58,33 @@ export const registerDB = async ({displayName, image, email, password}) => {
         email: user.email,
         displayName: user.displayName,
       }
-    // console.log('newUser', newUser);
       return newUser
     }
     return
   };
 
   export const authStateChanged = async () => {
+    let currentUser ={ 
+        uid: '',
+        photo:'',
+        email: '',
+        displayName: '',
+              } 
+      let loggedIn = false
     try {
-        const user = await auth.onAuthStateChanged((user) =>{ setIsAuth(user)});
-        console.log(user);
+    await auth.onAuthStateChanged(
+        (user) => {
+            if (user) {
+            currentUser ={ 
+            uid: user.uid,
+            photo:user.photoURL,
+            email: user.email,
+            displayName: user.displayName,
+                  }   
+            loggedIn = true
+            } 
+          })
+      return {currentUser, loggedIn}
     } catch (error) {
       throw error;
     }

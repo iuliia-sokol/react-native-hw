@@ -11,6 +11,7 @@ import Home from "./Screens/Home";
 import useCachedResources from "./hooks/useCachedResourses";
 import { store } from "./redux/store";
 import { currentState } from "./redux/auth/authOperations";
+import { getIsLoggedIn } from "./redux/auth/authSelectors";
 
 
 
@@ -39,15 +40,15 @@ export default () => {
 
 
 const App = () => {
-  // const dispatch = useDispatch()
-  const [user, setUser] = useState(null)
+ const dispatch = useDispatch()
+ const isLoggedIn = useSelector(getIsLoggedIn)
  
 
-//  useEffect(()=>{
-//   dispatch(currentState())
-  
-//  },[])
+ useEffect(()=>{
+  dispatch(currentState())
+ },[])
 
+ console.log(isLoggedIn);
 
   return (
       <NavigationContainer>
@@ -61,9 +62,12 @@ const App = () => {
             duration={5000} animationStyle={'zoomInOut'}/>
             
          <MainStack.Navigator initialRouteName="Registration">
-         <MainStack.Screen name="Registration" component={Register} />
-         <MainStack.Screen name="Login" component={Login} />
-         <MainStack.Screen name="Home" component={Home} options={{headerShown:false}}/>
+         {isLoggedIn ? <MainStack.Screen name="Home" component={Home} options={{headerShown:false}}/> :
+         <>
+          <MainStack.Screen name="Registration" component={Register} />
+          <MainStack.Screen name="Login" component={Login} />
+          </>}
+          
          </MainStack.Navigator>
       </NavigationContainer>
   );

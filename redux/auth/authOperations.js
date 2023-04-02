@@ -7,12 +7,10 @@ import { authStateChanged, getCurrentUserInfo, loginDB, registerDB, logOut } fro
 export const signUp = createAsyncThunk(
     'auth/signup',
     async (user, { rejectWithValue }) => {
-
       try {
         const { login, email, password, image } = user;
         const result = await registerDB({email: email,password: password, displayName:login, image});
         // console.log('register result from operations', result);
-
         return result;
       } catch (error) {
         console.dir({error})
@@ -73,8 +71,8 @@ export const signUp = createAsyncThunk(
     async (_, { rejectWithValue }) => {
       try {
         const result = await authStateChanged();
-        console.log('state', result);
-        return result;
+        // console.log('state', result);
+        return result
       } catch (error) {
         console.dir({error})
         Toast.error(`${error.code}`);
