@@ -4,13 +4,11 @@ import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 
 const Map = ({ navigation, route }) => {
-  let params = route.params
-  
-  const [posts, setPosts]=useState(params.params.posts)
-  const [location, setLocation] = useState(null);
-  const postSearched = posts.find(item=>item.id===params.id)
+  const coordinates = route.params.coordinates
+  const text = route.params.text
+  const description=route.params.location
 
-  // console.log(postSearched);
+  const [location, setLocation] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -28,18 +26,18 @@ const Map = ({ navigation, route }) => {
   }, []);
 
   return (
-   postSearched.coordinates.latitude &&  postSearched.coordinates.longitude ? 
+   coordinates.latitude &&  coordinates.longitude ? 
    (<View style={styles.container}>
       <MapView
         style={styles.mapStyle}
         region={{
-          ...postSearched.coordinates,
+          ...coordinates,
         }}
         showsUserLocation={true}
       >
-         {postSearched && (
-          <Marker title={postSearched.text} coordinate={postSearched.coordinates} description={postSearched.location?? postSearched.location} />
-        )}
+        
+          <Marker title={text?text : 'Pic location'} coordinate={coordinates} description={description? description:'Pic was taken here'} />
+      
       </MapView>
     </View>)
    : 

@@ -45,9 +45,9 @@ import { getPosts } from "../redux/dashboard/dbOperations";
          );
        }
 
-       const handleLocation = (id)=> {
+       const handleLocation = (coordinates,text,location)=> {
         navigation.navigate('Map',
-           {params,id},
+           {coordinates:coordinates, text:text, location:location},
          );
        }
 
@@ -83,7 +83,7 @@ import { getPosts } from "../redux/dashboard/dbOperations";
                 <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
                 </View>
                 </Pressable>
-                <Pressable onPress={()=> {handleLocation(item.postId)}}>
+                <Pressable onPress={()=> {handleLocation(item.coordinates,item.text,item.location)}}>
                 <View  style={styles.postLocationWrapper}>
                 <Icon name='map-pin' size={24} color='#BDBDBD' />
                 <Text  style={styles.postLocation}>{item.location}</Text>
