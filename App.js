@@ -48,7 +48,7 @@ const App = () => {
   dispatch(currentState())
  },[])
 
- console.log(isLoggedIn);
+//  console.log(isLoggedIn);
 
   return (
       <NavigationContainer>

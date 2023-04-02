@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from 'expo-location';
-import uuid from 'react-native-uuid';
 import  Icon from "@expo/vector-icons/Feather";
 import { FontAwesome5 } from '@expo/vector-icons'; 
 
@@ -38,7 +37,7 @@ const CreatePost=({ navigation, route })=> {
 
   const [disabled, setDisabled] = useState(true);
   const [disableClear, setDisableClear]=useState(true);
-  // const [posts, setPosts] =useState(params.posts);
+
   const [showKeyboard, setShowKeyboard] = useState(false);
   const [hasPermission, setHasPermission] = useState(null);
   const [cameraRef, setCameraRef] = useState(null);
@@ -72,11 +71,7 @@ const CreatePost=({ navigation, route })=> {
     getLocation()
   }
   if(location.latitude && location.longitude)  { 
-      const id=Date.now().toString()
-      // const data = new FormData();
-      // data.append('text', text);
-      // data.append('location', location);
-      // data.append('file', image);
+    
       const data = {
         userId: userId,
         comments:[],
@@ -86,21 +81,11 @@ const CreatePost=({ navigation, route })=> {
         coordinates: {...location},
         text:text
       }
-
-      console.log(data);
-      dispatch(addPost(data))
+    
+        dispatch(addPost(data))
         resetForm()
-        // setPosts(posts.unshift({
-        //   id: uuid.v4(),
-        //   comments:[],
-        //   likes:0,
-        //   file:image,
-        //   location: place,
-        //   coordinates: {...location},
-        //   text:text
-        // }))
-        // console.log(data);
-        // navigation.navigate("Posts", {data})
+
+        navigation.navigate("Posts")
       
       }
 }

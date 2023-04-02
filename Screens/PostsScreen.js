@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { 
     View,
@@ -10,21 +10,34 @@ import {
     Pressable,
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
-import { getAvatar, getEmail, getName, getPosts } from "../redux/auth/authSelectors";
+import { getAvatar, getEmail, getName } from "../redux/auth/authSelectors";
+import { getUsersPosts } from "../redux/dashboard//dbSelectors";
 
+import { getPosts } from "../redux/dashboard/dbOperations";
 
 
   const Posts=({ navigation, route })=> {
-    // const params = route.params
-    // console.log(params);
-    // const [image, setImage] = useState(params.file)
-    // const [name,setName]= useState(params.login)
-    // const [email,setEmail]=useState(params.email)
-    // const [posts,setPosts]=useState(params.posts)
+    const dispatch = useDispatch()
+
+    useEffect(()=>{
+        dispatch(getPosts())
+    },[])
+   
     const image = useSelector(getAvatar)
     const name = useSelector(getName)
     const email = useSelector(getEmail)
-    const posts = useSelector(getPosts)
+    const allPosts = useSelector(getUsersPosts)
+    
+    console.log(allPosts);
+
+    const [posts, setPosts] = useState([])
+
+    useEffect(()=>{
+        setPosts(allPosts)
+    }, 
+    [allPosts])
+
+
 
     const handleComment = (id) =>{
         navigation.navigate('Comment',
@@ -60,17 +73,17 @@ import { getAvatar, getEmail, getName, getPosts } from "../redux/auth/authSelect
         data={posts}
         renderItem={({ item }) => 
         <View style={styles.postsListItem}>
-            <Image style={styles.postImage} source={{uri: item.file}}/>
+            <Image style={styles.postImage} source={{uri: item.image}}/>
             <Text  style={styles.postText}>{item.text}</Text>
             <View style={styles.postDataWrapper}>
                 
-                <Pressable onPress={()=> {handleComment(item.id)}}>
+                <Pressable onPress={()=> {handleComment(item.postId)}}>
                 <View style={styles.postDataCommentsWrapper}> 
                 <Icon name='message-circle' size={24} color='#BDBDBD' />
                 <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
                 </View>
                 </Pressable>
-                <Pressable onPress={()=> {handleLocation(item.id)}}>
+                <Pressable onPress={()=> {handleLocation(item.postId)}}>
                 <View  style={styles.postLocationWrapper}>
                 <Icon name='map-pin' size={24} color='#BDBDBD' />
                 <Text  style={styles.postLocation}>{item.location}</Text>
@@ -79,7 +92,7 @@ import { getAvatar, getEmail, getName, getPosts } from "../redux/auth/authSelect
             </View>
         </View>
         }
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.postId}
       />
       </SafeAreaView>
       </View>

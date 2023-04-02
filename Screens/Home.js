@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch } from 'react-redux';
 import { HeaderBackButton } from '@react-navigation/elements';
 import {Pressable, StyleSheet,  } from "react-native";
@@ -10,7 +10,7 @@ import Profile from "../Screens/ProfileScreen";
 import Posts from "../Screens/PostsScreen";
 import Comments from "./CommentsScreen";
 import Map from "./MapScreen";
-// import { postsArray } from "../utils/posts";
+
 import { signOut } from "../redux/auth/authOperations";
 
 
@@ -20,12 +20,8 @@ const Tabs = createBottomTabNavigator();
 
 const Home = ({ navigation, route }) => {
    const dispatch = useDispatch()
-    // const {data} = route.params
-    // const obj = Object.fromEntries(data._parts);
-   
-    // const [posts, setPosts] = useState(postsArray);
 
-    // console.log(posts);
+  
 
     const handleLogout =()=>{
      dispatch(signOut())

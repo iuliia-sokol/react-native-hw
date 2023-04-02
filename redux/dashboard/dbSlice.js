@@ -1,17 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addPost } from './dbOperations';
+import { addPost, getPosts } from './dbOperations';
 
-const pending = state => {
+const initialState = {
+    isDataFetching: false,
+    posts: {},
+  };
+
+  const pending = state => {
     state.isDataFetching = true;
   };
   const rejected = (state, { payload }) => {
-    // console.log(payload);
-    state.isDataFetching = false;
-  };
-
-  const initialState = {
-    isDataFetching: false,
-    posts: {},
+    initialState
   };
 
   export const dbSlice = createSlice({
@@ -20,14 +19,16 @@ const pending = state => {
     extraReducers: builder =>
       builder
         .addCase(addPost.fulfilled, (state, { payload }) => {
-          console.log("payload post", payload);
-        //   state.userData.uid=payload.uid
-        //   state.userData.email = payload.email;
-        //   state.userData.name = payload.displayName;
-        //   state.userData.avatar = payload.photo;
-    
+          state.posts=payload
           state.isDataFetching = false;
-        }) 
+        })
+        .addCase(addPost.pending, pending)
+        .addCase(getPosts.pending, pending)
+        .addCase(getPosts.rejected, rejected)
+        .addCase(getPosts.fulfilled, (state, { payload }) => {
+            state.posts=payload
+            state.isDataFetching = false;
+          }) 
     
     });
   

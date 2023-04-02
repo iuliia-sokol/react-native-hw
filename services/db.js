@@ -2,13 +2,13 @@ import { db,storage } from "../firebase/config";
 
 export const addPostToDB = async ({ userId, comments, likes, image, location, coordinates, text}) => {
     try {
+      const date = Date.now().toString()
       const uploadImage = async(uri, userId) => {
         let URL;
         try{
             const response = await fetch(uri);
             const blob = await response.blob();
             const storageRef = storage.ref();
-            const date = Date.now().toString()
             const upload = storageRef.child(`usersPost/${userId}/${'post_'+userId+date}`);
             await upload.put(blob);
             await upload.getDownloadURL().then((url) => {
@@ -21,27 +21,30 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
     }
 
       const url = await uploadImage(image, userId)
-
-      const result = await db
+  
+     await db
         .collection("posts")
-        .add({ userId, comments, likes, image:url, location,  coordinates, text });
-        console.log("Post written: ", result);
+        .add({ userId, comments, likes, image:url, location,  coordinates, text, date });
+              
+        const result = await getPostsFromDB()
         return result
     } catch (error) {
       console.error("Error adding document: ", error);
     }
   };
 
-
-
-  // export const getDataFromFirestore = async () => {
-  //   try {
-  //     const snapshot = await db.collection("users").get();
-  //     snapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  export const getPostsFromDB = async () => {
+    let posts = []
+    try {
+      const snapshot = await db.collection("posts").get();
+      snapshot.forEach((doc) => {
+        posts.push({...doc.data(), postId: doc.id})
+      });
+      return posts 
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // export const updateDataInFirestore = async (collectionName, docId) => {
   //   try {
