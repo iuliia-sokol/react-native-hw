@@ -10,37 +10,24 @@ import {
     Pressable,
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
-import { getAvatar, getEmail, getName } from "../redux/auth/authSelectors";
-import { getUsersPosts } from "../redux/dashboard//dbSelectors";
 
+import { getAvatar, getEmail, getName } from "../redux/auth/authSelectors";
 import { getPosts } from "../redux/dashboard/dbOperations";
 
 
   const Posts=({ navigation, route })=> {
-    const dispatch = useDispatch()
-
-    useEffect(()=>{
-        dispatch(getPosts())
-    },[])
-   
+    const dispatch = useDispatch()   
     const image = useSelector(getAvatar)
     const name = useSelector(getName)
     const email = useSelector(getEmail)
-    const allPosts = useSelector(getUsersPosts)
 
     const [posts, setPosts] = useState([])
 
-      useEffect(()=>{
 
-        if(allPosts && allPosts.length>0) {
-            const sortedPosts = allPosts.slice().sort(function (a, b) {
-                var dateA = a.date;
-                var dateB = b.date;
-                return dateA < dateB ? 1 : -1; 
-              });
-              setPosts(sortedPosts)
-        }
-      },[allPosts])
+      useEffect(() => {
+        if(setPosts){
+        dispatch(getPosts(setPosts))}
+      }, [setPosts]);
 
     const handleComment = (image, comments,postId) =>{
         navigation.navigate('Comment',

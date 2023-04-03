@@ -16,8 +16,8 @@ import {
 } from "react-native";
 
 import { AntDesign } from '@expo/vector-icons'; 
-import { getUid } from "../redux/auth/authSelectors";
-import { addComments } from "../redux/dashboard/dbOperations";
+import { getUid,getAvatar } from "../redux/auth/authSelectors";
+import { addComments, getComments } from "../redux/dashboard/dbOperations";
 
 
 
@@ -25,21 +25,25 @@ const Comments= ({ navigation, route })=> {
     const {image, postId} = route.params
     const dispatch = useDispatch()
     const userId = useSelector(getUid)
+    const userAvatar = useSelector(getAvatar)
     const [disabled, setDisabled] = useState(true);
     const [text, setText] = useState('')
     const [showKeyboard, setShowKeyboard] = useState(false);
     const [comments, setComments] = useState([])
-
   
-    console.log('comments', comments);
-
-
-    useEffect(()=>{
-        if(text){
-     setDisabled(false)
+    
+      useEffect(() => {
+        if(postId && setComments) {
+            dispatch(getComments({postId:postId, setComments:setComments}));
         }
-        else { setDisabled(true)}
-    },[text])
+      }, [postId, setComments]);
+    
+      useEffect(()=>{
+            if(text){
+        setDisabled(false)
+            }
+            else { setDisabled(true)}
+        }, [text])
 
     const textHandler = (text) =>{
         setText(text);
@@ -52,18 +56,19 @@ const Comments= ({ navigation, route })=> {
 
     const handlePublishComment = (e)=>{
         e.preventDefault();
-           
+        const date = new Date().toLocaleDateString();
+        const time = new Date().toLocaleTimeString();
             const commentData = {
+                text,
                 userId: userId,
                 postId:postId,
-                text, 
-                date: Date.now(),
+                date,
+                time,
+                avatar: userAvatar,
             }
-
             dispatch(addComments({postId, commentData:commentData}))
             setText("");
             handleKeyboard()
-            //   navigation.setParams(params.posts)
       }
 
     return ( 
@@ -95,10 +100,10 @@ const Comments= ({ navigation, route })=> {
             <View style={styles.commentTextWrapper}
             >
                 <Text  style={styles.commentText}>{item.text}</Text>
-                <Text  style={styles.commentDate}>{new Date(item.date).toDateString()}</Text>
+                <Text  style={styles.commentDate}>{item.date} | {item.time}</Text>
             </View>
             <View style={styles.commentAvatar}>
-            {image ? <Image style={styles.commentAvatar} source={{uri: image}}/>:  null}
+            {image ? <Image style={styles.commentAvatar} source={{uri: item.avatar}}/>:  null}
             </View>
             
         </View>

@@ -28,64 +28,48 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
         .collection("posts")
         .add({ userId, comments, likes, image:url, location,  coordinates, text, date });
 
-        const result = await getPostsFromDB()
-        return result
     } catch (error) {
       console.error("Error adding document: ", error);
     }
   };
 
-  export const getPostsFromDB = async () => {
-    let posts = []
+  export const getAllPostsFromDB = async ({setPosts}) => {
     try {
-      const snapshot = await db.collection("posts").get();
-      snapshot.forEach((doc) => {
-        posts.push({...doc.data(), postId: doc.id})
+      await db.collection("posts").
+      onSnapshot((snapshot) => {
+        const allPosts = snapshot.docs.map((doc) => ({ ...doc.data(), postId: doc.id }));
+        return  setPosts(allPosts.slice().sort(function (a, b) {
+            var dateA = a.date;
+            var dateB = b.date;
+            return dateA < dateB ? 1 : -1; 
+          })
+          )
       });
-      return posts 
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   };
 
   export const addCommentToPostInDB = async ({postId,commentData}) => {
     try {
+           await  db.collection('posts').doc(postId).collection('comments').add({...commentData})
            const ref = await db.collection('posts').doc(postId);
            ref.update({
             comments: firebase.firestore.FieldValue.arrayUnion(commentData),
           });
-
-      // await db.collection('posts').doc(postId).collection('comments').add({...commentData})
-      // const result = await getCommentsFromDB({postId})
-
-      // console.log("comment added", result);
-      // return result
-
     } catch (error) {
       console.log(error);
     }
   };
 
-  // export const getCommentsFromDB = async ({postId}) => {
-  //   try {
-  //     let comments = []
-
-  //     const snapshot = await db.collection("posts").doc(postId).collection('comments').get();
-  //     snapshot.forEach((doc) => {
-  //       comments.push({...doc.data(), commentId: doc.id})
-  //     });
-
-  //     return comments
-  
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-
-    // const result = await db.collection('posts').doc(postId).collection('comments').onSnapshot((data)=> comments = data.docs.map((doc)=>({...doc.data(), id:doc.id})))
-      // const ref = await db.collection('posts').doc(postId).collection('comments');
-      // ref.update({
-      //   ...commentData
-      // });
-      // console.log('result',result);
+  export const getAllCommentsToPostFromDB = async ({postId, setComments}) => {
+    try {
+        console.log(postId, setComments);
+     await db.collection('posts').doc(postId).collection('comments').
+      onSnapshot((snapshot) => {
+        setComments(snapshot.docs.map((doc) => ({ ...doc.data(), commentId: doc.id })));
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
