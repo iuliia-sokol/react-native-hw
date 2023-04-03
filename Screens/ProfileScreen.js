@@ -38,17 +38,16 @@ const Profile= ({ navigation, route })=> {
     // console.log(liked);
    }
 
-   const handleLocation = (id)=> {
+   const handleLocation = (coordinates,text,location)=> {
     navigation.navigate('Map',
-       {params,id},
+       {coordinates, text, location},
      );
    }
 
-
-   const handleComment = (id) =>{
-       navigation.navigate('Comment',
-           {params,id},
-         );
+   const handleComment = (image, comments,postId) =>{
+    navigation.navigate('Comment',
+       {image, comments, postId},
+     );
    }
 
     return (
@@ -89,20 +88,20 @@ const Profile= ({ navigation, route })=> {
             <Text  style={styles.postText}>{item.text}</Text>
             <View style={styles.postDataWrapper}>
               <View style={styles.postDataAchievesWrapper}>
-              <Pressable onPress={()=>{handleComment(item.id)}}>
+              <Pressable onPress={()=>{handleComment(item.image, item.comments, item.postId)}}>
                 <View style={styles.postDataCommentsWrapper}>
                 <Icon  name='message-circle' size={24} color={item.comments.length>0? '#FF6C00': '#BDBDBD'} />  
                 <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
                 </View>
                 </Pressable>
-                <Pressable onPress={()=>{handleLike(item.id)}}>
+                <Pressable onPress={()=>{handleLike(item.postId)}}>
                 <View style={styles.postDataCommentsWrapper}>
                  <Icon name='thumbs-up' size={24} color={item.likes>0?'#FF6C00':'#BDBDBD' } /> 
                 <Text  style={styles.postComments}>{item.likes? item.likes:0 }</Text>
                 </View>
                 </Pressable>
                 </View>
-                <Pressable onPress={()=>{handleLocation(item.id)}}>
+                <Pressable onPress={()=>{handleLocation(item.coordinates,item.text,item.location)}}>
                 <View  style={styles.postLocationWrapper}>
                 <Icon name='map-pin' size={24} color='#BDBDBD' />
                 <Text  style={styles.postLocation}>{`${item.location}`.split(",")[0]}</Text>
