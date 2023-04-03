@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import {
     View, 
     Image, 
@@ -13,27 +14,25 @@ import {
     Platform, 
     KeyboardAvoidingView
 } from "react-native";
-import uuid from 'react-native-uuid';
+
 import { AntDesign } from '@expo/vector-icons'; 
+import { getUid } from "../redux/auth/authSelectors";
+import { addComments } from "../redux/dashboard/dbOperations";
+
 
 
 const Comments= ({ navigation, route })=> {
-    let params = route.params
-    const [image, setImage] = useState(params.params.file)
-    const [posts, setPosts]=useState(params.params.posts)
+    const {image, postId} = route.params
+    const dispatch = useDispatch()
+    const userId = useSelector(getUid)
     const [disabled, setDisabled] = useState(true);
     const [text, setText] = useState('')
-    const [comments, setComments] = useState([])
     const [showKeyboard, setShowKeyboard] = useState(false);
+    const [comments, setComments] = useState([])
 
-    const postSearched = posts.find(item=>item.id===params.id)
+  
+    console.log('comments', comments);
 
-    useEffect(()=>{
-        if(postSearched){
-     setComments(postSearched.comments)
-        }
-       
-    },[postSearched.comments])
 
     useEffect(()=>{
         if(text){
@@ -43,7 +42,7 @@ const Comments= ({ navigation, route })=> {
     },[text])
 
     const textHandler = (text) =>{
-        setText(text.trim());
+        setText(text);
     }
 
     const handleKeyboard =()=>{
@@ -53,18 +52,18 @@ const Comments= ({ navigation, route })=> {
 
     const handlePublishComment = (e)=>{
         e.preventDefault();
-              const data = new FormData();
-              data.append('text', text);
-              data.append('date',  Date.now());
-              setText("");
-              setComments(postSearched.comments.unshift({
-                id: uuid.v4(),
+           
+            const commentData = {
+                userId: userId,
+                postId:postId,
+                text, 
                 date: Date.now(),
-                text:text
-              }))
+            }
 
-              handleKeyboard()
-              navigation.setParams(params.posts)
+            dispatch(addComments({postId, commentData:commentData}))
+            setText("");
+            handleKeyboard()
+            //   navigation.setParams(params.posts)
       }
 
     return ( 
@@ -74,7 +73,7 @@ const Comments= ({ navigation, route })=> {
         behavior='position'              >
        <TouchableWithoutFeedback onPress={handleKeyboard}>
         <View style={styles.imageWrapper}>
-        <Image style={styles.postImage} source={{uri: postSearched.file}}/>
+        <Image style={styles.postImage} source={{uri: image}}/>
         </View>
         </TouchableWithoutFeedback>
         
@@ -82,14 +81,14 @@ const Comments= ({ navigation, route })=> {
 
         <SafeAreaView  style={styles.postsList}>
         <FlatList
-               ListEmptyComponent={() => (postSearched.comments.length <=0 ? 
+               ListEmptyComponent={() => (comments.length <=0 ? 
                 <View style={styles.emptyMessageBox}> 
                     <Text style={styles.emptyMessageStyle}>No comments added yet...</Text> 
                 </View>
             
             : null)
           }
-        data={postSearched.comments}
+        data={comments}
         renderItem={({ item }) => 
         <TouchableWithoutFeedback onPress={handleKeyboard}>
         <View style={styles.commentBox}>
@@ -105,7 +104,7 @@ const Comments= ({ navigation, route })=> {
         </View>
         </TouchableWithoutFeedback>
         }
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.commentId}
       />
       </SafeAreaView>
 

@@ -27,27 +27,30 @@ import { getPosts } from "../redux/dashboard/dbOperations";
     const name = useSelector(getName)
     const email = useSelector(getEmail)
     const allPosts = useSelector(getUsersPosts)
-    
-    console.log(allPosts);
 
     const [posts, setPosts] = useState([])
 
-    useEffect(()=>{
-        setPosts(allPosts)
-    }, 
-    [allPosts])
+      useEffect(()=>{
 
+        if(allPosts && allPosts.length>0) {
+            const sortedPosts = allPosts.slice().sort(function (a, b) {
+                var dateA = a.date;
+                var dateB = b.date;
+                return dateA < dateB ? 1 : -1; 
+              });
+              setPosts(sortedPosts)
+        }
+      },[allPosts])
 
-
-    const handleComment = (id) =>{
+    const handleComment = (image, comments,postId) =>{
         navigation.navigate('Comment',
-           {params,id},
+           {image, comments, postId},
          );
        }
 
        const handleLocation = (coordinates,text,location)=> {
         navigation.navigate('Map',
-           {coordinates:coordinates, text:text, location:location},
+           {coordinates, text, location},
          );
        }
 
@@ -68,7 +71,7 @@ import { getPosts } from "../redux/dashboard/dbOperations";
        </View>
        </View>
 <View style={styles.postsList}>
-    <SafeAreaView >
+   {posts.length>0 && <SafeAreaView >
       <FlatList
         data={posts}
         renderItem={({ item }) => 
@@ -77,7 +80,7 @@ import { getPosts } from "../redux/dashboard/dbOperations";
             <Text  style={styles.postText}>{item.text}</Text>
             <View style={styles.postDataWrapper}>
                 
-                <Pressable onPress={()=> {handleComment(item.postId)}}>
+                <Pressable onPress={()=> {handleComment(item.image, item.comments, item.postId)}}>
                 <View style={styles.postDataCommentsWrapper}> 
                 <Icon name='message-circle' size={24} color='#BDBDBD' />
                 <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
@@ -94,7 +97,7 @@ import { getPosts } from "../redux/dashboard/dbOperations";
         }
         keyExtractor={(item) => item.postId}
       />
-      </SafeAreaView>
+      </SafeAreaView>}
       </View>
       </View>
     );

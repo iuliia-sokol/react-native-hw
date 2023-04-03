@@ -1,4 +1,6 @@
 import { db,storage } from "../firebase/config";
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/firestore';
 
 export const addPostToDB = async ({ userId, comments, likes, image, location, coordinates, text}) => {
     try {
@@ -25,7 +27,7 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
      await db
         .collection("posts")
         .add({ userId, comments, likes, image:url, location,  coordinates, text, date });
-              
+
         const result = await getPostsFromDB()
         return result
     } catch (error) {
@@ -46,14 +48,44 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
     }
   };
 
-  // export const updateDataInFirestore = async (collectionName, docId) => {
+  export const addCommentToPostInDB = async ({postId,commentData}) => {
+    try {
+           const ref = await db.collection('posts').doc(postId);
+           ref.update({
+            comments: firebase.firestore.FieldValue.arrayUnion(commentData),
+          });
+
+      // await db.collection('posts').doc(postId).collection('comments').add({...commentData})
+      // const result = await getCommentsFromDB({postId})
+
+      // console.log("comment added", result);
+      // return result
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // export const getCommentsFromDB = async ({postId}) => {
   //   try {
-  //     const ref = await db.collection(collectionName).doc(docId);
-  //     ref.update({
-  //       age: 25,
+  //     let comments = []
+
+  //     const snapshot = await db.collection("posts").doc(postId).collection('comments').get();
+  //     snapshot.forEach((doc) => {
+  //       comments.push({...doc.data(), commentId: doc.id})
   //     });
-  //     console.log("document updated");
+
+  //     return comments
+  
   //   } catch (error) {
   //     console.log(error);
   //   }
   // };
+
+
+    // const result = await db.collection('posts').doc(postId).collection('comments').onSnapshot((data)=> comments = data.docs.map((doc)=>({...doc.data(), id:doc.id})))
+      // const ref = await db.collection('posts').doc(postId).collection('comments');
+      // ref.update({
+      //   ...commentData
+      // });
+      // console.log('result',result);

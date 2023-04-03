@@ -71,7 +71,6 @@ const CreatePost=({ navigation, route })=> {
     getLocation()
   }
   if(location.latitude && location.longitude)  { 
-    
       const data = {
         userId: userId,
         comments:[],
@@ -81,12 +80,9 @@ const CreatePost=({ navigation, route })=> {
         coordinates: {...location},
         text:text
       }
-    
         dispatch(addPost(data))
         resetForm()
-
-        navigation.navigate("Posts")
-      
+        navigation.navigate("Posts")   
       }
 }
 
