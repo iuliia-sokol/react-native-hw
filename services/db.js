@@ -64,7 +64,6 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
 
   export const getAllCommentsToPostFromDB = async ({postId, setComments}) => {
     try {
-        console.log(postId, setComments);
      await db.collection('posts').doc(postId).collection('comments').
       onSnapshot((snapshot) => {
           const allComments = snapshot.docs.map((doc) => ({ ...doc.data(), commentId: doc.id }));

@@ -28,7 +28,6 @@ const pending = state => {
     extraReducers: builder =>
       builder
         .addCase(signUp.fulfilled, (state, { payload }) => {
-          console.log("payload register", payload);
           state.userData.uid=payload.uid
           state.userData.email = payload.email;
           state.userData.name = payload.displayName;
@@ -37,7 +36,6 @@ const pending = state => {
           state.isUserFetching = false;
         })
         .addCase(signIn.fulfilled, (state, { payload }) => {
-            console.log("payload login",payload);
           state.userData.uid=payload.uid
           state.userData.email = payload.email;
           state.userData.name = payload.displayName;

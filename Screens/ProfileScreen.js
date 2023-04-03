@@ -13,7 +13,7 @@ import {
 import  Icon from "@expo/vector-icons/Feather";
 import { getAvatar, getName } from "../redux/auth/authSelectors";
 import { addLike, getPosts, removeLike } from "../redux/dashboard/dbOperations";
-
+import { signOut } from "../redux/auth/authOperations";
 
 const Profile= ({ navigation, route })=> {
   const dispatch = useDispatch()
@@ -28,11 +28,9 @@ const Profile= ({ navigation, route })=> {
 
   const handleLogout =()=>{
     dispatch(signOut())
-    // navigation.navigate('Login')
    }
 
    const handleLike = (postId, liked) =>{
-    console.log(liked);
     if(!liked)
     {dispatch(addLike({postId:postId}))}
     if(liked)
@@ -97,7 +95,7 @@ const Profile= ({ navigation, route })=> {
                 </Pressable>
                 <Pressable onPress={()=>{handleLike(item.postId, item.liked)}}>
                 <View style={styles.postDataCommentsWrapper}>
-                 <Icon name='thumbs-up' size={24} color={item.likes>0?'#FF6C00':'#BDBDBD' } /> 
+                 <Icon name='thumbs-up' size={24} color={item.liked?'#FF6C00':'#BDBDBD' } /> 
                 <Text  style={styles.postComments}>{item.likes? item.likes:0 }</Text>
                 </View>
                 </Pressable>
@@ -179,12 +177,15 @@ const Profile= ({ navigation, route })=> {
     postsListItem:{
         marginTop:32,
         display:'flex',
+
         flexDirection:'column',
         gap:8
     },
     postImage:{
-        width:434,
+        width:'100%',
         height:240,
+        borderRadius:8,
+        alignSelf:'center'
     },
     postText:{
         fontFamily: "Roboto-Medium",
