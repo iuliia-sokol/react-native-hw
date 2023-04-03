@@ -144,13 +144,6 @@ const CreatePost=({ navigation, route })=> {
     }, [location.latitude, location.longitude, getLocationPressed]);
 
 
-    // useEffect(() => {
-    //   navigation.setOptions({
-    //     posts: posts,
-    //   });
-    // }, [navigation, posts]);
-
-
     if (hasPermission === false) {
       Alert.alert("No access to camera")
     }

@@ -59,6 +59,7 @@ const Comments= ({ navigation, route })=> {
         const date = new Date().toLocaleDateString();
         const time = new Date().toLocaleTimeString();
             const commentData = {
+                timestamp: Date.now().toString(),
                 text,
                 userId: userId,
                 postId:postId,

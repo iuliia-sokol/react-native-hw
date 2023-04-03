@@ -67,7 +67,12 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
         console.log(postId, setComments);
      await db.collection('posts').doc(postId).collection('comments').
       onSnapshot((snapshot) => {
-        setComments(snapshot.docs.map((doc) => ({ ...doc.data(), commentId: doc.id })));
+          const allComments = snapshot.docs.map((doc) => ({ ...doc.data(), commentId: doc.id }));
+          setComments(allComments.slice().sort(function (a, b) {
+            var dateA = a.timestamp;
+            var dateB = b.timestamp;
+            return dateA < dateB ? 1 : -1; 
+          }))
       });
     } catch (error) {
       console.log(error.message);
