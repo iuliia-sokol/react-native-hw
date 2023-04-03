@@ -12,7 +12,7 @@ import {
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
 import { getAvatar, getName } from "../redux/auth/authSelectors";
-import { getPosts } from "../redux/dashboard/dbOperations";
+import { addLike, getPosts, removeLike } from "../redux/dashboard/dbOperations";
 
 
 const Profile= ({ navigation, route })=> {
@@ -31,11 +31,12 @@ const Profile= ({ navigation, route })=> {
     // navigation.navigate('Login')
    }
 
-   const handleLike = (id) =>{
-    const liked = posts.find(item => item.id===id)
-    liked.likes++
-    // navigation.setParams(posts)
-    // console.log(liked);
+   const handleLike = (postId, liked) =>{
+    console.log(liked);
+    if(liked === 'no')
+    {dispatch(addLike({postId:postId}))}
+    if(liked === 'yes')
+    {dispatch(removeLike({postId:postId}))}
    }
 
    const handleLocation = (coordinates,text,location)=> {
@@ -94,7 +95,7 @@ const Profile= ({ navigation, route })=> {
                 <Text  style={styles.postComments}>{item.comments.length?? item.comments.length }</Text>
                 </View>
                 </Pressable>
-                <Pressable onPress={()=>{handleLike(item.postId)}}>
+                <Pressable onPress={()=>{handleLike(item.postId, item.liked)}}>
                 <View style={styles.postDataCommentsWrapper}>
                  <Icon name='thumbs-up' size={24} color={item.likes>0?'#FF6C00':'#BDBDBD' } /> 
                 <Text  style={styles.postComments}>{item.likes? item.likes:0 }</Text>
@@ -110,7 +111,7 @@ const Profile= ({ navigation, route })=> {
             </View>
         </View>
         }
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.postId}
       />
       </SafeAreaView>}
              

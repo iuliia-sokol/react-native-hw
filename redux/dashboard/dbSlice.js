@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addPost, addComments, getPosts, getComments } from './dbOperations';
+import { addPost, addComments, getPosts, getComments, addLike, removeLike } from './dbOperations';
 
 const initialState = {
     isDataFetching: false,
@@ -8,7 +8,7 @@ const initialState = {
   const pending = state => {
     state.isDataFetching = true;
   };
-  const rejected = (state, { payload }) => {
+  const rejected = () => {
     initialState
   };
 
@@ -25,20 +25,30 @@ const initialState = {
             state.posts=payload
             state.isDataFetching = false;
           })
-          .addCase(addComments.fulfilled, (state, { payload }) => {
+          .addCase(addComments.fulfilled, (state) => {
             state.isDataFetching = false;
           })
-          .addCase(getComments.fulfilled, (state, { payload }) => {
+          .addCase(getComments.fulfilled, (state) => {
+            state.isDataFetching = false;
+          })
+          .addCase(addLike.fulfilled, (state) => {
+            state.isDataFetching = false;
+          })
+          .addCase(removeLike.fulfilled, (state) => {
             state.isDataFetching = false;
           })
           .addCase(addPost.pending, pending)
           .addCase(getPosts.pending, pending)
           .addCase(addComments.pending, pending)
           .addCase(getComments.pending, pending)
+          .addCase(addLike.pending, pending)
+          .addCase(removeLike.pending, pending)
           .addCase(addPost.rejected, rejected)
           .addCase(getPosts.rejected, rejected)
           .addCase(addComments.rejected, rejected)
           .addCase(getComments.rejected, rejected)
+          .addCase(addLike.rejected, rejected)
+          .addCase(removeLike.rejected, rejected)
 
     });
   

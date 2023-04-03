@@ -26,10 +26,10 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
   
      await db
         .collection("posts")
-        .add({ userId, comments, likes, image:url, location,  coordinates, text, date });
+        .add({ userId, comments, likes, image:url, location,  coordinates, text, date, liked:'no' });
 
     } catch (error) {
-      console.error("Error adding document: ", error);
+      console.error(error.message);
     }
   };
 
@@ -76,5 +76,31 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
       });
     } catch (error) {
       console.log(error.message);
+    }
+  };
+
+
+  export const addLikeToPostInDB = async ({postId}) => {
+    try {
+           const ref = await db.collection('posts').doc(postId);
+           ref.update({
+            likes: firebase.firestore.FieldValue.increment(1),
+            liked: 'yes',
+          });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  export const removeLikeToPostInDB = async ({postId}) => {
+    try {
+           const ref = await db.collection('posts').doc(postId);
+           ref.update({
+            likes: firebase.firestore.FieldValue.increment(-1),
+            liked: 'no',
+          });
+          
+    } catch (error) {
+      console.log(error);
     }
   };

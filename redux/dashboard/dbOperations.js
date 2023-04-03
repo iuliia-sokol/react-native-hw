@@ -1,6 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { Toast } from 'toastify-react-native';
-import { addPostToDB, addCommentToPostInDB, getAllPostsFromDB, getAllCommentsToPostFromDB } from '../../services/db';
+import { addPostToDB, 
+    addCommentToPostInDB, 
+    getAllPostsFromDB, 
+    getAllCommentsToPostFromDB, 
+    addLikeToPostInDB, 
+    removeLikeToPostInDB 
+} from '../../services/db';
 
 export const addPost = createAsyncThunk(
     'db/addPost',
@@ -20,7 +26,6 @@ export const addPost = createAsyncThunk(
   export const getPosts = createAsyncThunk(
     'db/getPosts',
     async (setPosts, { rejectWithValue }) => {
-        console.log(setPosts);
       try {
         const result = await getAllPostsFromDB({setPosts:setPosts});
         return result;
@@ -50,10 +55,39 @@ export const addPost = createAsyncThunk(
   export const getComments = createAsyncThunk(
     'db/getComments',
     async (data, { rejectWithValue }) => {
-    //  console.log(data);
      const {postId, setComments} = data
       try {
         await getAllCommentsToPostFromDB({postId:postId, setComments:setComments});
+        return 
+      } catch (error) {
+        console.dir({error})
+        Toast.error(`${error.code}`);
+        return rejectWithValue(error);
+      }
+    }
+  );
+
+  export const addLike = createAsyncThunk(
+    'db/addLike',
+    async (data, { rejectWithValue }) => {
+     const {postId} = data
+      try {
+        await addLikeToPostInDB({postId: postId});
+        return 
+      } catch (error) {
+        console.dir({error})
+        Toast.error(`${error.code}`);
+        return rejectWithValue(error);
+      }
+    }
+  );
+
+  export const removeLike = createAsyncThunk(
+    'db/removeLike',
+    async (data, { rejectWithValue }) => {
+     const {postId} = data
+      try {
+        await removeLikeToPostInDB({postId: postId});
         return 
       } catch (error) {
         console.dir({error})
