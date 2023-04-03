@@ -11,22 +11,21 @@ import {
   FlatList, 
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
-import { getAvatar, getName, getPosts } from "../redux/auth/authSelectors";
-
+import { getAvatar, getName } from "../redux/auth/authSelectors";
+import { getPosts } from "../redux/dashboard/dbOperations";
 
 
 const Profile= ({ navigation, route })=> {
   const dispatch = useDispatch()
-  // let params = route.params
-
-  // const [image, setImage] = useState(params.file)
-  // const [name,setName]= useState(params.login)
-  // const [posts, setPosts]=useState(params.posts)
-
   const image = useSelector(getAvatar)
   const name = useSelector(getName)
-  const posts = useSelector(getPosts)
-   
+  const [posts, setPosts] = useState([])
+
+  useEffect(() => {
+    if(setPosts){
+    dispatch(getPosts(setPosts))}
+  }, [setPosts]);
+
   const handleLogout =()=>{
     dispatch(signOut())
     // navigation.navigate('Login')
@@ -73,12 +72,20 @@ const Profile= ({ navigation, route })=> {
                 <Icon name='log-out' size={24} color='#BDBDBD'/>
             </Pressable>
 
-       {posts &&  <SafeAreaView style={styles.postsList}>
+       {posts &&  posts.length>0 &&
+       <SafeAreaView style={styles.postsList}>
       <FlatList
+              ListEmptyComponent={() => (posts.length <=0 ? 
+                <View style={styles.emptyMessageBox}> 
+                    <Text style={styles.emptyMessageStyle}>No posts added yet...</Text> 
+                </View>
+            
+            : null)
+          }
         data={posts}
         renderItem={({ item }) => 
         <View style={styles.postsListItem}>
-            <Image style={styles.postImage} source={{uri: item.file}}/>
+            <Image style={styles.postImage} source={{uri: item.image}}/>
             <Text  style={styles.postText}>{item.text}</Text>
             <View style={styles.postDataWrapper}>
               <View style={styles.postDataAchievesWrapper}>

@@ -58,8 +58,15 @@ import { getPosts } from "../redux/dashboard/dbOperations";
        </View>
        </View>
 <View style={styles.postsList}>
-   {posts.length>0 && <SafeAreaView >
+   <SafeAreaView >
       <FlatList
+              ListEmptyComponent={() => (posts.length <=0 ? 
+                <View style={styles.emptyMessageBox}> 
+                    <Text style={styles.emptyMessageStyle}>No posts added yet...</Text> 
+                </View>
+            
+            : null)
+          }
         data={posts}
         renderItem={({ item }) => 
         <View style={styles.postsListItem}>
@@ -84,7 +91,7 @@ import { getPosts } from "../redux/dashboard/dbOperations";
         }
         keyExtractor={(item) => item.postId}
       />
-      </SafeAreaView>}
+      </SafeAreaView>
       </View>
       </View>
     );
