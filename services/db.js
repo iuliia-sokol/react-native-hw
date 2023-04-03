@@ -26,7 +26,7 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
   
      await db
         .collection("posts")
-        .add({ userId, comments, likes, image:url, location,  coordinates, text, date, liked:'no' });
+        .add({ userId, comments, likes, image:url, location,  coordinates, text, date, liked:false });
 
     } catch (error) {
       console.error(error.message);
@@ -85,7 +85,7 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
            const ref = await db.collection('posts').doc(postId);
            ref.update({
             likes: firebase.firestore.FieldValue.increment(1),
-            liked: 'yes',
+            liked: true,
           });
     } catch (error) {
       console.log(error);
@@ -97,7 +97,7 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
            const ref = await db.collection('posts').doc(postId);
            ref.update({
             likes: firebase.firestore.FieldValue.increment(-1),
-            liked: 'no',
+            liked: false,
           });
           
     } catch (error) {

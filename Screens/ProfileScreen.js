@@ -33,9 +33,9 @@ const Profile= ({ navigation, route })=> {
 
    const handleLike = (postId, liked) =>{
     console.log(liked);
-    if(liked === 'no')
+    if(!liked)
     {dispatch(addLike({postId:postId}))}
-    if(liked === 'yes')
+    if(liked)
     {dispatch(removeLike({postId:postId}))}
    }
 
