@@ -137,7 +137,8 @@ import { getPosts } from "../redux/dashboard/dbOperations";
         textAlign: "center",
     },
     postsList:{
-        marginTop:32,
+      width:'100%',
+      marginTop:32,
      paddingBottom:50
     },
     postsListItem:{
@@ -147,8 +148,9 @@ import { getPosts } from "../redux/dashboard/dbOperations";
         gap:8
     },
     postImage:{
-        width:434,
+        width:'100%',
         height:240,
+        borderRadius:8
     },
     postText:{
         fontFamily: "Roboto-Medium",
