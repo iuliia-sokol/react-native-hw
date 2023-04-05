@@ -45,10 +45,10 @@ const CreatePost=({ navigation, route })=> {
   const [photoTaken, setPhotoTaken] = useState(false)
 
   const textHandler = (text) =>{
-    setText(text.trim());
+    setText(text);
 }
   const locationHandler= (text) =>{
-    setPlace(text.trim());
+    setPlace(text);
 }
 
   const handleKeyboard =()=>{
@@ -76,9 +76,9 @@ const CreatePost=({ navigation, route })=> {
         comments:[],
         likes:0,
         image,
-        location: place,
+        location: place.trim(),
         coordinates: {...location},
-        text:text
+        text:text.trim()
       }
         dispatch(addPost(data))
         resetForm()

@@ -11,19 +11,20 @@ import {
   FlatList, 
 } from "react-native";
 import  Icon from "@expo/vector-icons/Feather";
-import { getAvatar, getName } from "../redux/auth/authSelectors";
-import { addLike, getPosts, removeLike } from "../redux/dashboard/dbOperations";
+import { getAvatar, getName, getUid } from "../redux/auth/authSelectors";
+import { addLike, getUsersPosts, removeLike } from "../redux/dashboard/dbOperations";
 import { signOut } from "../redux/auth/authOperations";
 
 const Profile= ({ navigation, route })=> {
   const dispatch = useDispatch()
+  const userId = useSelector(getUid)
   const image = useSelector(getAvatar)
   const name = useSelector(getName)
   const [posts, setPosts] = useState([])
 
   useEffect(() => {
     if(setPosts){
-    dispatch(getPosts(setPosts))}
+    dispatch(getUsersPosts({userId:userId, setUsersPosts:setPosts}))}
   }, [setPosts]);
 
   const handleLogout =()=>{

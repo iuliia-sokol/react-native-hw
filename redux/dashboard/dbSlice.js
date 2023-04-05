@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { addPost, addComments, getPosts, getComments, addLike, removeLike } from './dbOperations';
+import { addPost, addComments, getPosts, getComments, addLike, removeLike, getUsersPosts } from './dbOperations';
 
 const initialState = {
     isDataFetching: false,
@@ -18,11 +18,12 @@ const initialState = {
     extraReducers: builder =>
       builder
         .addCase(addPost.fulfilled, (state, { payload }) => {
-          state.posts=payload
           state.isDataFetching = false;
         })
         .addCase(getPosts.fulfilled, (state, { payload }) => {
-            state.posts=payload
+            state.isDataFetching = false;
+          })
+          .addCase(getUsersPosts.fulfilled, (state, { payload }) => {
             state.isDataFetching = false;
           })
           .addCase(addComments.fulfilled, (state) => {
@@ -39,12 +40,14 @@ const initialState = {
           })
           .addCase(addPost.pending, pending)
           .addCase(getPosts.pending, pending)
+          .addCase(getUsersPosts.pending, pending)
           .addCase(addComments.pending, pending)
           .addCase(getComments.pending, pending)
           .addCase(addLike.pending, pending)
           .addCase(removeLike.pending, pending)
           .addCase(addPost.rejected, rejected)
           .addCase(getPosts.rejected, rejected)
+          .addCase(getUsersPosts.rejected, rejected)
           .addCase(addComments.rejected, rejected)
           .addCase(getComments.rejected, rejected)
           .addCase(addLike.rejected, rejected)

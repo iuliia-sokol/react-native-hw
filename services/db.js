@@ -50,6 +50,24 @@ export const addPostToDB = async ({ userId, comments, likes, image, location, co
     }
   };
 
+  export const getUsersPostsFromDB = async ({userId,setUsersPosts}) => {
+    try {
+      await db.collection("posts").where("userId", "==", `${userId}`).
+      onSnapshot((snapshot) => {
+        const allUsersPosts =  snapshot.docs.map((doc) => ({ ...doc.data(), postId: doc.id }))
+
+        return setUsersPosts(allUsersPosts.slice().sort(function (a, b) {
+          var dateA = a.date;
+          var dateB = b.date;
+          return dateA < dateB ? 1 : -1; 
+        })
+        );
+      });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   export const addCommentToPostInDB = async ({postId,commentData}) => {
     try {
            await  db.collection('posts').doc(postId).collection('comments').add({...commentData})

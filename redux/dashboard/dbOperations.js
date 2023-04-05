@@ -5,7 +5,8 @@ import { addPostToDB,
     getAllPostsFromDB, 
     getAllCommentsToPostFromDB, 
     addLikeToPostInDB, 
-    removeLikeToPostInDB 
+    removeLikeToPostInDB, 
+    getUsersPostsFromDB
 } from '../../services/db';
 
 export const addPost = createAsyncThunk(
@@ -28,6 +29,21 @@ export const addPost = createAsyncThunk(
     async (setPosts, { rejectWithValue }) => {
       try {
         const result = await getAllPostsFromDB({setPosts:setPosts});
+        return result;
+      } catch (error) {
+        console.dir({error})
+        Toast.error(`${error.code}`);
+        return rejectWithValue(error);
+      }
+    }
+  );
+
+  export const getUsersPosts = createAsyncThunk(
+    'db/getUsersPosts',
+    async (data, { rejectWithValue }) => {
+      const {userId, setUsersPosts} = data
+      try {
+        const result = await getUsersPostsFromDB({userId:userId, setUsersPosts:setUsersPosts});
         return result;
       } catch (error) {
         console.dir({error})
