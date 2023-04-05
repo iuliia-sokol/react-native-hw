@@ -156,7 +156,21 @@ const CreatePost=({ navigation, route })=> {
               >
         <View style={{...styles.addPostForm, paddingBottom: showKeyboard && Platform.OS == "android" ? 32 : 270}}>
 
-      {hasPermission && !photoTaken ? (
+      {hasPermission && !photoTaken && image ? (
+        <View style={styles.addImage}>
+         {image? 
+         <Image  style={styles.picture} source={{uri: image}}/> : null}
+         <Pressable
+                     style={image? {...styles.addImageBtn, backgroundColor:'rgba(255, 255, 255, 0.3)'} : styles.addImageBtn} 
+                     onPress={()=>{setPhotoTaken(false); setImage(null)}}
+                     accessibilityLabel={"Add picture"}
+                   >
+                   <FontAwesome5 name="camera" size={20} color={image?"#FFFFFF":"#BDBDBD"} style={styles.addImageBtnIcon} />
+                   </Pressable>
+         </View> 
+      )
+      :
+      hasPermission && !photoTaken && !image ? (
       <Camera
         style={styles.addImage}
         type={type}
@@ -221,9 +235,6 @@ const CreatePost=({ navigation, route })=> {
          </View> 
        )
       }
-
-      
-
        {image? 
           <Pressable style={{alignSelf:'flex-start'}} onPress={()=>imageHandler(setImage)} accessibilityLabel={"Change picture"}>
                 <Text style={styles.addImageText}>Change photo</Text>
