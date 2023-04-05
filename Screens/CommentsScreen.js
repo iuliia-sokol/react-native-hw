@@ -56,8 +56,8 @@ const Comments= ({ navigation, route })=> {
 
     const handlePublishComment = (e)=>{
         e.preventDefault();
-        const date = new Date().toLocaleDateString();
-        const time = new Date().toLocaleTimeString();
+        const date = new Date().toLocaleDateString('en-US',{day: 'numeric',month: "long",  year: 'numeric'});
+        const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
             const commentData = {
                 timestamp: Date.now().toString(),
                 text,
@@ -97,7 +97,7 @@ const Comments= ({ navigation, route })=> {
         data={comments}
         renderItem={({ item }) => 
         <TouchableWithoutFeedback onPress={handleKeyboard}>
-        <View style={styles.commentBox}>
+        <View style={item.userId === userId ? styles.commentBox: {...styles.commentBox, flexDirection:'row-reverse'}}>
             <View style={styles.commentTextWrapper}
             >
                 <Text  style={styles.commentText}>{item.text}</Text>
@@ -184,6 +184,7 @@ const styles = StyleSheet.create({
         borderRadius:6,
         padding:16,
         width:300,
+        flexGrow:1
     },
     commentText:{
         fontFamily: "Roboto-Regular",
