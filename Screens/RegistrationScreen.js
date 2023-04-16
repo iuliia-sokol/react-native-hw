@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"; 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import  Icon from "@expo/vector-icons/Feather";
 import {
     TouchableWithoutFeedback,
@@ -51,12 +51,7 @@ const Registration = ({ navigation }) => {
 
       const onRegister = (e) => {
         e.preventDefault();
-        // const data = new FormData();
-        // data.append('login', login);
-        // data.append('email', email);
-        // data.append('password', password);
-        // data.append('file', image);
-     
+    
         const user = {
           login: login.trim(), 
           email: email.trim(), 
@@ -65,9 +60,7 @@ const Registration = ({ navigation }) => {
         }
         
         dispatch(signUp(user))
-        resetForm()
-        // navigation.navigate("Home", {data: data})
-        
+        resetForm()      
       };
     
       const handleInputShow = () => {

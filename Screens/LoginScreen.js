@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"; 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
     TouchableWithoutFeedback,
     StyleSheet,
@@ -75,7 +75,6 @@ const Login=({ navigation })=> {
             >
               <KeyboardAvoidingView
                 behavior={Platform.OS == "ios" && "padding" }
-                // behavior={Platform.OS == "ios" ? "padding" : "height"}
               >
                 <View
                   style={{
